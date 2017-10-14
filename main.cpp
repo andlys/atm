@@ -13,6 +13,8 @@ using json = nlohmann::json;
 
 
 class Account {
+  // TODO make proper incapslulation
+public:
   string _cardNumber = "1234 1234 1234 1234";
   string _fullName = "Бублик Володимир Васильович";
   int _balance = 42; // TODO change to Money type
@@ -64,6 +66,78 @@ void Session::writeToFile(string fname) {
   out << std::setw(2) << j << endl;
 }
 
+// temporarily no more than one single instance of a bank can be supported
+// and only with a name of "ПриватБанк"
+class Bank {
+private:
+  // file name where all accounts of all banks are sotred
+  static const string _accountsFile;
+  const string _name;
+public:
+  Bank(const string& name): _name(name) {}
+  // returns vector of all accounts of this bank
+  vector<Account> getAccounts(); // TODO private
+  void pushAccount(const Account& a); // TODO private
+};
+
+const string Bank::_accountsFile("accounts.json");
+
+
+vector<Account> Bank::getAccounts() {
+  json j;
+  try {
+    std::ifstream in(_accountsFile);
+    in >> j;
+  } catch (const std::invalid_argument& arg) {
+    cout << "ERROR: file " << _accountsFile << " is missing" << endl;
+  }
+  if (j.empty() || j.at("accounts").empty())
+    return vector<Account>();
+  else
+    return j.at("accounts").get<vector<Account>>();
+}
+
+void Bank::pushAccount(const Account& a) {
+  vector<Account> allAccounts = getAccounts();
+  allAccounts.push_back(a);
+  json j = {
+    {"bank", _name},
+    {"accounts", allAccounts}
+  };
+  std::ofstream out(_accountsFile);
+  out << std::setw(2) << j << endl;
+}
+
+/*
+void prototypePush() {
+  json j = {
+    {
+      {"bank", "Ощадбанк"},
+      {"accounts", {}}
+    },
+    {
+      {"bank", "ПриватБанк"},
+      {"accounts", {}}
+    },
+    {
+      {"bank", "Райффайзен Аваль"},
+      {"accounts", {}}
+    }
+  };
+  std::ofstream out("accounts.json");
+  out << std::setw(2) << j << endl;
+}
+*/
+
+void prototypePush() {
+  json j = {
+    {"bank", "ПриватБанк"},
+    {"accounts", {}}
+  };
+  std::ofstream out("accounts.json");
+  out << std::setw(2) << j << endl;
+}
+
 int main() {
   Account a;
   Session s(a);
@@ -72,7 +146,18 @@ int main() {
   s.pushAction("transfer from X to Y");
   s.pushAction("logout");
   json j = s;
-  cout << std::setw(2) << j << endl;
+  cout << "session object converted to JSON:" << endl
+       << std::setw(2) << j << endl;
   s.writeToFile("session_history.json");
+  //prototypePush();
+
+  Bank superBank("ПриватБанк");
+  Account acc;
+  acc._fullName = "Мельниченко Денис Батькович";
+  acc._balance = 1100;
+  superBank.getAccounts();
+  superBank.pushAccount(acc);
+  superBank.pushAccount(Account());
+  cout << "Now check out accounts.json file!" << endl;
   return 0;
 }

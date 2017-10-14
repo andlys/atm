@@ -1,3 +1,5 @@
 # binary files
 *.o
 *.exe
+#*.json
+#*.sh
