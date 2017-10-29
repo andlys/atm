@@ -23,18 +23,18 @@ private:
 	class Session;
 	Session* _session;
 
-	
+	const string _address;
 	class BanknoteManager;
 
 
 public:
-
+  // TODO methods from diagram
 };
 
 class ATM::Session {
 private:
 	vector<Action> _history;
-	Account* _account;
+	Account* _currentAccount;
 public:
 	bool pushToHistory(const Action&);
 	bool writeToFile();

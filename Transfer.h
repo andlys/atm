@@ -12,5 +12,5 @@ private:
 public:
 	Transfer();
 	~Transfer();
+  const string& toString() const;
 };
-

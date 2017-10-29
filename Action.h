@@ -4,9 +4,10 @@
 using namespace std;
 
 class Action {
+private:
+  // _date ??? datetime???
 public:
 	Action();
 	virtual ~Action();
-	virtual const string toString() const = 0;
+	virtual const string& toString() const = 0;
 };
-
