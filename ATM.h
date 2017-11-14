@@ -14,48 +14,57 @@ struct Banknote {
 	const string _id;
 };
 
-class ATM {
-
+class ATM{
 private:
-	Bank* _bank;
-
-	// Current Session.
-	class Session;
-	Session* _session;
-
-	const string _address;
-	class BanknoteManager;
-
-
+    class Session;
+    Session* _currentSession;
+    class BanknoteManager;
+    BanknoteManager* _banknoteManager;
+    Bank* _bank;
+    const string _address;
 public:
-  // TODO methods from diagram
+    ATM(BanknoteManager&, Bank&);
+    ATM(Bank& bank):_currentSession(0),
+                _banknoteManager(0),
+                _bank(&bank){}
+    ~ATM();
+    void login(const string&, const string&);
+    void logout();
+    bool transfer(const string&, const Money&);
+    //bool withdrow(const Money&);
+
 };
 
 class ATM::Session {
 private:
 	vector<Action> _history;
 	Account* _currentAccount;
+  bool writeToFile();
 public:
-	bool pushToHistory(const Action&);
-	bool writeToFile();
+	Session& pushToHistory(const Action&);
+  // TODO make destructor invoking writeToFile();
 };
 
 class ATM::BanknoteManager {
 private:
 	map<int, vector<Banknote>> _available;
-	class BankNoteList;
+	class MoneyDisposal;
+  const Money& _m;
 public:
-	const BankNoteList& getCash();
+	const MoneyDisposal& getCash(unsigned int);
 };
 
-class ATM::BanknoteManager::BankNoteList : Action {
+// 4 корп 3 пов 318, 13:30, четвер, 23 листопада
+
+// TODO make global
+class ATM::BanknoteManager::MoneyDisposal : Action {
 	friend BanknoteManager;
 private:
-	BankNoteList();
+	MoneyDisposal();
 	//TODO
 	const vector<Banknote> _banknotes;
 public:
-	~BankNoteList();
+	~MoneyDisposal();
 	const vector<Banknote>& banknotes() const;
 	//TODO
 	virtual const string toString() const;
