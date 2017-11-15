@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <vector>
 #include <map>
 #include "Bank.h"
@@ -6,6 +7,7 @@
 #include "Account.h"
 #include "Transfer.h"
 #include <string>
+
 using namespace std;
 
 struct Banknote {
@@ -39,33 +41,108 @@ class ATM::Session {
 private:
 	vector<Action> _history;
 	Account* _currentAccount;
-  bool writeToFile();
+	bool writeToFile() {
+		for (vector<Action>::iterator it = _history.begin(); it != _history.end(); ++it) {
+			cout << "TODO WriteToFile SESSION HISTORY" << endl;
+		}
+	}
 public:
-	Session& pushToHistory(const Action&);
+	Session(): _currentAccount(0) {
+		return;
+	}
+	~Session() {
+		writeToFile();
+		delete _currentAccount;
+		return;
+	}
+	bool setAccount(const Account& account) {
+		if (_currentAccount != 0) return false;
+		//TODO need copy constuctor
+		//_currentAccount(account);
+		return true;
+	}
+	Session& pushToHistory(const Action& action) {
+		_history.push_back(action);
+		return *this;
+	}
   // TODO make destructor invoking writeToFile();
 };
 
-class ATM::BanknoteManager {
+// TODO make global
+class BanknoteManager {
+	typedef int countMoney;
 private:
-	map<int, vector<Banknote>> _available;
+	map<countMoney, vector<Banknote>> _available;
 	class MoneyDisposal;
-  const Money& _m;
+	//const Money& _m;
+
+	vector<int> amounts() const {
+		
+	};
+
+	vector<vector<int>> solutions(const vector<int> values, const vector<int> amounts, const vector<int> variation, unsigned int price, int position) {
+		vector<vector<int>> list;
+		int value = compute(values, variation);
+		if (value < price) {
+			for (int i = position; i < values.size(); i++) {
+				if (amounts[i] > variation[i]) {
+					vector<int> newVariation(variation);
+					newVariation[i]++;
+					vector<vector<int>> newList = solutions(values, amounts, newVariation, price, i);
+					if (!newList.empty()) {
+						list.insert(list.end(), newList.begin(), newList.end());
+						break;
+					}
+				}
+			}
+		}
+		else if (value == price) {
+			list.push_back(myCopy(variation));
+		}
+		return list;
+	}
+
+	int compute(const vector<int> values, const vector<int> variation) {
+		int ret = 0;
+		for (int i = 0; i < variation.size(); i++) {
+			ret += values[i] * variation[i];
+		}
+		return ret;
+	}
+
+	vector<int> myCopy(const vector<int> ar) {
+		vector<int> ret(ar.size());
+		for (int i = 0; i < ar.size(); i++) {
+			ret[i] = ar[i];
+		}
+		return ret;
+	}
+
 public:
-	const MoneyDisposal& getCash(unsigned int);
+	const vector<vector<int>> getCash(unsigned int cash) {
+		////500, 200, 100, 50, 20, 10, 5, 2, 1
+		vector<int> values = { 500, 200, 100, 50, 20, 10, 5, 2, 1 };
+
+		vector<int> amounts = { 0, 0, 0, 0, 0, 0, 0, 4, 10 };
+		vector<vector<int>> results = solutions(values, amounts, vector<int>(9), cash, 0);
+		return results;
+	}
 };
 
 // 4 корп 3 пов 318, 13:30, четвер, 23 листопада
 
 // TODO make global
-class ATM::BanknoteManager::MoneyDisposal : Action {
+class MoneyDisposal : Action {
 	friend BanknoteManager;
 private:
-	MoneyDisposal();
-	//TODO
 	const vector<Banknote> _banknotes;
+	MoneyDisposal(const vector<Banknote> banknotes) : _banknotes(banknotes) {
+		return;
+	}
+	const string do_toString() const {
+		return "TODO toString on MoneyDisposal!!";
+	}
 public:
-	~MoneyDisposal();
-	const vector<Banknote>& banknotes() const;
-	//TODO
-	virtual const string toString() const;
+	~MoneyDisposal(){}
+	const vector<Banknote>& banknotes() const { return _banknotes; };
 };

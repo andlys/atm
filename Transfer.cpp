@@ -6,7 +6,3 @@ Transfer::Transfer(Account* from, Account* to, Money amount):
                   _amount(amount){}
 
 Transfer::~Transfer(){}
-
-const string Transfer::toString() const {
-    return "";
-}

@@ -6,10 +6,15 @@ using namespace std;
 class Action {
 private:
   // _date ??? datetime???
+	virtual const string do_toString() const {
+		return "default";
+	}
 public:
-	//Action();
+	Action() {}
     virtual ~Action() {};
 	
     // It seems better to return string, not string&
-    virtual const string toString() const = 0;
+	const string toString() const {
+		return do_toString();
+	}
 };
