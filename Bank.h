@@ -27,12 +27,12 @@ public:
     bool changePIN(const string&, const string&, const string&);
 
     Account* getAccount(const string&, const string&);
-    
+
     // Very bad decision
     Account* getAccount(const string&);
 
     // Delete this. Created for the sake of testing.
     void pseudoAdd(Money amount, Account& acc){
-        *acc._balance = *acc._balance + amount;
+        *acc._balance += amount;
     }
 };

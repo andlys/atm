@@ -5,12 +5,12 @@ Bank::Bank(vector<Account*> accounts): _accounts(accounts){}
 Bank::~Bank(){}
 
 const Account& Bank::addToBalance(const Money& amount, Account& target){
-    *target._balance = *target._balance + amount;
+    *target._balance += amount;
     return target;
 }
 
 const Account& Bank::removeFromBalance(const Money& amount, Account& target){
-    *target._balance = *target._balance - amount;
+    *target._balance -= amount;
     return target;
 }
 
@@ -31,8 +31,12 @@ Account* Bank::getAccount(const string& cardNum){
 }
 
 bool Bank::transfer(Transfer& t){
-    *t.to()->_balance = *t.to()->_balance + t.amount();
-    *t.from()->_balance = *t.from()->_balance - t.amount();
-    t._success = true;
-    return true;
+    Money commission = t.amount() * 3; // commission is 3 %
+    // maybe we should store total amount of commissions somewhere in bank?
+    Money totalWithdraw = commission + t.amount();
+    if (t._success = (*t.from()->_balance >= totalWithdraw)) {
+        *t.to()->_balance += t.amount();
+        *t.from()->_balance -= totalWithdraw;
+    }
+    return t._success;
 }
