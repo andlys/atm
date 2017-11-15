@@ -1,5 +1,5 @@
 #pragma once
-class Money {
+struct Money {
 private:
 	unsigned long long _coins;
 
@@ -9,14 +9,15 @@ public:
     // Money(const Money&)
 	~Money();
 
-	const Money operator+(const Money&);
-	const Money operator-(const Money&);
-	const Money operator*(const Money&);
-	const Money operator/(const Money&);
-    bool operator>=(const Money&);
 	operator double();
-    
-    const unsigned long long& coins();
-    const unsigned long long& coins() const;
+
+  const unsigned long long& coins();
+  const unsigned long long& coins() const;
 
 };
+
+const Money operator+(const Money&, const Money&);
+const Money operator-(const Money&, const Money&);
+const Money operator*(const Money&, const Money&);
+const Money operator/(const Money&, const Money&);
+bool operator>=(const Money&, const Money&);

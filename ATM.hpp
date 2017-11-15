@@ -28,7 +28,8 @@ public:
     void login(const string&, const string&);
     void logout();
     bool transfer(const string&, const Money&);
-    
+    //bool withdrow(const Money&);
+
 };
 
 #endif /* ATM_hpp */

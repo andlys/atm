@@ -9,10 +9,10 @@ Money::operator double(){ return double(_coins*100); }
 const unsigned long long& Money::coins(){ return _coins; }
 const unsigned long long& Money::coins() const{ return _coins; }
 
-const Money Money::operator+(const Money& amount){
-    return Money(this->coins()+amount.coins());
+const Money operator+(const Money& a, const Money& b){
+    return Money(a.coins() + b.coins());
 }
 
-const Money Money::operator-(const Money& amount){
-    return Money(this->coins()-amount.coins());
+const Money operator-(const Money& a, const Money& b){
+    return Money(a.coins() - b.coins());
 }
