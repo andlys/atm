@@ -40,10 +40,13 @@ int main(int argc, const char * argv[]) {
     accounts.push_back(*acc3);*/
     
     Bank bank(accounts);
+    Account* a = bank.getAccount("2");
     
     ATM atm(bank);
     
     atm.login("1", "qwerty");
+    
+    atm.transfer("2", 13);
     
     bank.pseudoAdd(1234, *accounts[0]);
     

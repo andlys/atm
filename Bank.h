@@ -1,13 +1,10 @@
 #pragma once
 #include "Account.h"
-//#include "Transfer.h"
+#include "Transfer.h"
 #include "Money.h"
 #include <vector>
 
 using namespace std;
-
-//class Account;
-class Transfer;
 
 class Bank
 {
@@ -30,6 +27,9 @@ public:
     bool changePIN(const string&, const string&, const string&);
 
     Account* getAccount(const string&, const string&);
+    
+    // Very bad decision
+    Account* getAccount(const string&);
 
     // Delete this. Created for the sake of testing.
     void pseudoAdd(Money amount, Account& acc){

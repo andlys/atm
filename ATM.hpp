@@ -21,12 +21,16 @@ private:
     Bank* _bank;
 public:
     ATM(BanknoteManager&, Bank&);
+    // Just for testing.
     ATM(Bank& bank):_currentSession(0),
                 _banknoteManager(0),
                 _bank(&bank){}
     ~ATM();
     void login(const string&, const string&);
     void logout();
+    
+    Account* currentAccount();
+    
     bool transfer(const string&, const Money&);
     //bool withdrow(const Money&);
 
