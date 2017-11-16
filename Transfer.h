@@ -2,20 +2,26 @@
 #include "Money.h"
 #include "Account.h"
 #include "Action.h"
+#include "lib/fmt/format.h"
+#include "lib/fmt/printf.h"
 
-class Transfer : Action {
+class Transfer : public Action {
   friend class Bank;
 private:
 	Account* _from;
 	Account* _to;
 	const Money _amount;
-    //TODO DATE _date
+    //TODO DATE _date // TODO delete this comment since date is already present in Action
     bool _success;
 	// It seems better to return just string.
 	//const string& toString() const;
 	const string do_toString() const {
-		return "TODO toString on Transfer!!";
+		return fmt::format("Transfer {5}: #{0} ({1}) sent {2} to #{3} ({4})",
+            _from->cardNumber(), _from->fullName(), double(_amount),
+            _to->cardNumber(),   _to->fullName(),
+            isSuccessful() ? "(success)" : "(failure)");
 	}
+
 public:
 	Transfer(Account*, Account*, const Money);
 	~Transfer();

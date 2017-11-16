@@ -21,6 +21,7 @@ private:
     Account(const Account &);
 public:
 	Account(string, string, unsigned long long);
+    Account(string, string, string, unsigned long long);
 	~Account();
 
     // balance modifier

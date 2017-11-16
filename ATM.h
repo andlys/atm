@@ -24,6 +24,7 @@ private:
     BanknoteManager* _banknoteManager;
     Bank* _bank;
     const string _address;
+    friend void test_session(void); // TODO comment
 public:
     ATM(BanknoteManager&, Bank&);
     ATM(Bank& bank):_currentSession(0),
@@ -39,11 +40,12 @@ public:
 
 class ATM::Session {
 private:
-	vector<Action> _history;
+	vector<const Action*> _history;
 	Account* _currentAccount;
 	bool writeToFile() {
-		for (vector<Action>::iterator it = _history.begin(); it != _history.end(); ++it) {
-			cout << "TODO WriteToFile SESSION HISTORY" << endl;
+		for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
+            // TODO send to file
+			cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
 		}
 	}
 public:
@@ -52,6 +54,9 @@ public:
 	}
 	~Session() {
 		writeToFile();
+        for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
+            delete *it; // TODO remove once we implement smart ptr
+        }
 		delete _currentAccount;
 		return;
 	}
@@ -61,7 +66,7 @@ public:
 		//_currentAccount(account);
 		return true;
 	}
-	Session& pushToHistory(const Action& action) {
+	Session& pushToHistory(const Action* action) {
 		_history.push_back(action);
 		return *this;
 	}
@@ -77,7 +82,7 @@ private:
 	//const Money& _m;
 
 	vector<int> amounts() const {
-		
+
 	};
 
 	vector<vector<int>> solutions(const vector<int> values, const vector<int> amounts, const vector<int> variation, unsigned int price, int position) {
