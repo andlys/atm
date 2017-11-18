@@ -18,7 +18,7 @@ const A operator+=(const A& a, const A& b){
 int main() {
     A a;
     cout << a.n() << endl;
-    const A a2;
+    A a2;
     cout << a2.n() << endl;
     a._n = 15;
     a2._n = 10;

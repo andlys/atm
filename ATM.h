@@ -47,6 +47,7 @@ private:
             // TODO send to file
 			cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
 		}
+        return false; // TODO
 	}
 public:
 	Session(): _currentAccount(0) {
