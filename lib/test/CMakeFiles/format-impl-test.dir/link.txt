@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -O3 -DNDEBUG -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/format-impl-test.dir/format-impl-test.cc.o  -o ../bin/format-impl-test  libtest-main.a libgmock.a ../fmt/libfmt.a 

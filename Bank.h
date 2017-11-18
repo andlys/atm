@@ -2,6 +2,7 @@
 #include "Account.h"
 #include "Transfer.h"
 #include "Money.h"
+#include "MoneyDisposal.h"
 #include <vector>
 
 using namespace std;
@@ -22,9 +23,9 @@ public:
     //TODO singleton
     static Bank getBank();
     bool transfer(Transfer&);
-    bool withdraw(const Account&, const Money&);
-    //bool withdraw(akka-47oont-scrrrraaaa, manidispozal); // TODO
-    bool changePIN(const string&, const string&, const string&);
+    //bool withdraw(const Account&, const Money&);
+    bool withdraw(const Account&, MoneyDisposal&);
+    bool changePIN(Account*, const string&, const string&);
 
     Account* getAccount(const string&, const string&);
 

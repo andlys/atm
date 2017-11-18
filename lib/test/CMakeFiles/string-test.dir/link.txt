@@ -1,0 +1,1 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -O3 -DNDEBUG -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/string-test.dir/string-test.cc.o  -o ../bin/string-test  libtest-main.a libgmock.a ../fmt/libfmt.a 

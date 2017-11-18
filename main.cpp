@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "Bank.h"
-#include "ATM.hpp"
+#include "ATM.h"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -40,7 +40,6 @@ int main(int argc, const char * argv[]) {
     accounts.push_back(*acc3);*/
     
     Bank bank(accounts);
-    Account* a = bank.getAccount("2");
     
     ATM atm(bank);
     

@@ -1,17 +1,17 @@
-#pragma once
+//
+//  ATM.h
+//  Bank
+//
+//  Created by Denys Melnychenko on 11/13/17.
+//  Copyright © 2017 Denys Melnychenko. All rights reserved.
+//
+
+#ifndef ATM_h
+#define ATM_h
+
+#include <stdio.h>
 #include <iostream>
-#include <vector>
-#include <map>
 #include "Bank.h"
-#include "Action.h"
-#include "Account.h"
-#include "Transfer.h"
-#include <string>
-#include "Banknote.h"
-#include "BanknoteManager.h"
-
-
-using namespace std;
 
 class ATM{
 private:
@@ -20,53 +20,22 @@ private:
     class BanknoteManager;
     BanknoteManager* _banknoteManager;
     Bank* _bank;
-    const string _address;
-    friend void test_session(void); // TODO comment
 public:
     ATM(BanknoteManager&, Bank&);
+    // Just for testing.
     ATM(Bank& bank):_currentSession(0),
-                _banknoteManager(0),
-                _bank(&bank){}
+                    _banknoteManager(0),
+                    _bank(&bank){}
     ~ATM();
-    void login(const string&, const string&);
-    void logout();
+    Account* login(const string&, const string&);
+    Account* logout();
+    
+    Account* currentAccount();
+    
     bool transfer(const string&, const Money&);
-    //bool withdrow(const Money&);
-
+    bool withdrow(const Money&);
+    
 };
 
-class ATM::Session {
-private:
-	vector<const Action*> _history;
-	Account* _currentAccount;
-	bool writeToFile() {
-		for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
-            // TODO send to file
-			cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
-		}
-        return false; // TODO
-	}
-public:
-	Session(): _currentAccount(0) {
-		return;
-	}
-	~Session() {
-		writeToFile();
-        for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
-            delete *it; // TODO remove once we implement smart ptr
-        }
-		delete _currentAccount;
-		return;
-	}
-	bool setAccount(const Account& account) {
-		if (_currentAccount != 0) return false;
-		//TODO need copy constuctor
-		//_currentAccount(account);
-		return true;
-	}
-	Session& pushToHistory(const Action* action) {
-		_history.push_back(action);
-		return *this;
-	}
-  // TODO make destructor invoking writeToFile();
-};
+#endif /* ATM_h */
+
