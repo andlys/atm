@@ -1,6 +1,10 @@
 #include "Bank.h"
 
-Bank::Bank(vector<Account*> accounts): _accounts(accounts){}
+Bank::Bank(vector<Account*> accounts):
+    _accounts(accounts),
+    _commissionWithdrawal(5),
+    _commissionTransfer(3),
+    _commissionMobileReplenishment(2) {}
 
 Bank::~Bank(){}
 
@@ -31,8 +35,7 @@ Account* Bank::getAccount(const string& cardNum){
 }
 
 bool Bank::transfer(Transfer& t){
-    Money commission = t.amount() * 3; // commission is 3 %
-    // maybe we should store total amount of commissions somewhere in bank?
+    Money commission = t.amount() * _commissionTransfer;
     Money totalWithdraw = commission + t.amount();
     t._success = (*t.from()->_balance >= totalWithdraw);
     if (t._success) {
@@ -45,8 +48,3 @@ bool Bank::transfer(Transfer& t){
 bool Bank::changePIN(Account* acc, const string& oldP, const string& newP){
     return 0;
 }
-
-
-
-
-

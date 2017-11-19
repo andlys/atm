@@ -17,6 +17,10 @@ private:
     // No copying constructor for bank.
     Bank(Bank&);
 public:
+    const unsigned int _commissionWithdrawal;
+    const unsigned int _commissionTransfer;
+    const unsigned int _commissionMobileReplenishment;
+
     Bank(vector<Account*>);
     ~Bank();
 

@@ -26,7 +26,7 @@ private:
 	}
 
 public:
-	Transfer(Account*, Account*, const Money);
+	Transfer(Account*, Account*, const Money&);
 	~Transfer();
 	bool isSuccessful() const { return _success; }
 

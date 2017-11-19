@@ -1,6 +1,6 @@
 #include "Transfer.h"
 
-Transfer::Transfer(Account* from, Account* to, Money amount):
+Transfer::Transfer(Account* from, Account* to, const Money& amount):
                   Action(),
                   _from(from),
                   _to(to),

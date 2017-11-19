@@ -31,4 +31,10 @@ public:
 	Account* currentAccount();
     bool transfer(const string&, const Money&);
 	MoneyDisposal withdraw(unsigned int);
+    // it is safe since Bank is const
+    const Bank& bank() { return _bank; }
+    // it is safe since Account is const
+    const Account* getAccount(const string& cardId) {
+        return _bank.getAccount(cardId);
+    }
 };

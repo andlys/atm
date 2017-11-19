@@ -17,7 +17,7 @@ private:
     string _phoneNumber;
     Money* _balance;
     string _password;
-    //vector<Action> _history;
+    //vector<Action> _history; // TODO
     bool isValid(const string&, const string&);
     Account(const Account &);
 public:
@@ -25,16 +25,10 @@ public:
     Account(string, string, string, unsigned long long);
 	~Account();
 
-    // balance modifier
+    // balance selector
     const Money& balance() const { return *_balance; }
-
     const string& cardNumber() const { return _cardNumber; }
     const string& fullName() const { return _fullName; }
     const string& phoneNumber() const { return _phoneNumber; }
-    //const Money balance(){ return *_balance; }
-    //
-    // // NOT SECURE AT ALL
-    // const string password(){ return _password; }
-    // const string password() const { return _password; }
     void updateHistory(const vector<Action>&);
 };

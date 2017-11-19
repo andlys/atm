@@ -32,5 +32,17 @@ int main() {
     d;
     */
     //delete d
+
+    double* k = new double(3.14);
+    {
+        double b = 3.14;
+        k = &b;
+        cout << k << endl;
+        cout << *k << endl;
+        cout << "the point" << endl;
+    }
+    // cout << k << endl;
+    // delete k; //error
+
     return 0;
 }
