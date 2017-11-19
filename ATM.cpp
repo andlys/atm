@@ -18,7 +18,7 @@ public:
         delete _account;
         return;
     };
-    
+
     Account* account() const { return _account; }
     Session& pushToHistory(const Action* action) {
         _history.push_back(action);
@@ -38,6 +38,8 @@ ATM::~ATM(){
 }
 
 Account* ATM::login(const string& cardNum, const string& pass) {
+    if (_currentSession)
+        logout();
 	Account* acc = _bank.getAccount(cardNum, pass);
 	if (acc)
 		_currentSession = new Session(acc);
@@ -45,16 +47,19 @@ Account* ATM::login(const string& cardNum, const string& pass) {
 }
 
 Account* ATM::logout() {
-	Account* acc = _currentSession->account();
-	delete _currentSession;
-	_currentSession = 0;
+	Account* acc = 0;
+    if (_currentSession) {
+        acc = _currentSession->account();
+        delete _currentSession;
+	    _currentSession = 0;
+    }
 	return acc;
 }
 
 Account* ATM::currentAccount() {
-	if (_currentSession != 0) return _currentSession->account();
+	if (_currentSession)
+        return _currentSession->account();
 	return 0;
-	//return _currentSession->account();
 }
 
 // Not secure if session not initiaized.
