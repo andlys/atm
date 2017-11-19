@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 
-using namespace std;
+using std::string;
+using std::ostream;
+using std::endl;
 
 struct Banknote {
 	const unsigned int _nominal;
@@ -9,7 +11,7 @@ struct Banknote {
 	const string _id;
 };
 
-ostream& operator<<(ostream &os, const Banknote &b) {
+inline ostream& operator<<(ostream &os, const Banknote &b) {
 	os << "Nominal: " << b._nominal << endl;
 	os << "Code: " << b._code << endl;
 	os << "Id: " << b._id << endl;

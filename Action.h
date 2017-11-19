@@ -2,7 +2,7 @@
 #include <string>
 #include "lib/fmt-4.0.0/fmt/time.h"
 
-using namespace std;
+using std::string;
 
 class Action {
 private:

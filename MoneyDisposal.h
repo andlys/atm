@@ -4,7 +4,11 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::ostream;
+using std::endl;
+
 class BanknoteManager;
 
 class MoneyDisposal : public Action {
@@ -24,14 +28,14 @@ public:
 	const vector<Banknote>& banknotes() const { return _banknotes; };
 };
 
-ostream& operator<<(ostream &os, const MoneyDisposal &md) {
+inline ostream& operator<<(ostream &os, const MoneyDisposal &md) {
 	os << "|--------------------|" << endl;
 	os << "Message: " << md.message() << endl;
 	vector<Banknote> bn = md.banknotes();
 	if (!md.banknotes().empty())
 		os << "----------------------" << endl;
 	for (int i = 0; i < bn.size(); ++i) {
-		cout << bn[i] << endl;
+		os << bn[i] << endl;
 	}
 	os << "|--------------------|" << endl;
 	return os;

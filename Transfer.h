@@ -5,6 +5,8 @@
 #include "lib/fmt-4.0.0/fmt/format.h"
 #include "lib/fmt-4.0.0/fmt/printf.h"
 
+using std::string;
+
 class Transfer : public Action {
   friend class Bank;
 private:
@@ -16,7 +18,8 @@ private:
 	// It seems better to return just string.
 	//const string& toString() const;
 	const string do_toString() const {
-		return fmt::format("Transfer {5}: #{0} ({1}) sent {2} to #{3} ({4})",
+        // TODO money has currency type ???
+		return fmt::format("Transfer {5}: #{0} ({1}) sent {2} UAH to #{3} ({4})",
             _from->cardNumber(), _from->fullName(), double(_amount),
             _to->cardNumber(),   _to->fullName(),
             isSuccessful() ? "(success)" : "(failure)");

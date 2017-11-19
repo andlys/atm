@@ -52,5 +52,5 @@ public:
 	Account* logout();
 	Account* currentAccount();
     bool transfer(const string&, const Money&);
-	MoneyDisposal withdrow(const Money& money);
+	MoneyDisposal withdraw(unsigned int);
 };

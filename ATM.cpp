@@ -39,16 +39,10 @@ bool ATM::transfer(const string& to, const Money& amount) {
     return _bank->transfer(transfer);
 }
 
-MoneyDisposal ATM::withdrow(const Money & money) {
-	cout << (double)money << endl;
-	const MoneyDisposal md = _banknoteManager->getCash((double)money);
+// copying constructor of MoneyDisposal is invoked twice in this method TODO fix
+MoneyDisposal ATM::withdraw(unsigned int cash) {
+	const MoneyDisposal md = _banknoteManager->getCash(cash);
 	//TODO don't work
 	//_currentSession->pushToHistory(&md);
-	return md;	
+	return md;
 }
-
-
-
-
-
-
