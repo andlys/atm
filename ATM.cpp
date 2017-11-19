@@ -12,6 +12,32 @@ ATM::~ATM(){
     delete _banknoteManager;
 }
 
+class ATM::Session {
+private:
+    vector<const Action*> _history;
+    Account* _account;
+    bool writeToFile() {
+        for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
+            // TODO send to file
+            cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
+        }
+        return false; // TODO
+    }
+public:
+    Session(Account* acc) : _account(acc) {}
+    ~Session() {
+        writeToFile();
+        delete _account;
+        return;
+    };
+    
+    Account* account() const { return _account; }
+    Session& pushToHistory(const Action* action) {
+        _history.push_back(action);
+        return *this;
+    }
+};
+
 Account* ATM::login(const string& cardNum, const string& pass) {
 	Account* acc = _bank->getAccount(cardNum, pass);
 	if (acc)

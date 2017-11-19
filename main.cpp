@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
     
     Bank bank(accounts);
     
-    ATM atm(bank);
+    ATM atm(&bank);
     
     atm.login("1", "qwerty");
     
