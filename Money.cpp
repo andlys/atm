@@ -1,6 +1,7 @@
 #include "Money.h"
 
-Money::Money(const unsigned long long balance):_coins(balance){}
+Money::Money(const unsigned long long balance):
+    _coins(balance), _code("UAH"){}
 
 Money::~Money(){}
 

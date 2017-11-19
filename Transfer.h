@@ -19,9 +19,9 @@ private:
 	//const string& toString() const;
 	const string do_toString() const {
         // TODO money has currency type ???
-		return fmt::format("Transfer {5}: #{0} ({1}) sent {2} UAH to #{3} ({4})",
+		return fmt::format("Transfer {6}: #{0} ({1}) sent {2} {5} to #{3} ({4})",
             _from->cardNumber(), _from->fullName(), double(_amount),
-            _to->cardNumber(),   _to->fullName(),
+            _to->cardNumber(),   _to->fullName(), _amount.code(),
             isSuccessful() ? "(success)" : "(failure)");
 	}
 

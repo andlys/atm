@@ -20,8 +20,7 @@ void test_session(void) {
     Account* acc5 = new Account("777", "Paul Graham", "0", 500);
     Account* acc6 = new Account("888", "Nikolas Taleb", "0", 100);
     {
-        ATM::Session s;
-        s.setAccount(acc);
+        ATM::Session s(new Account("333", "Umberto Eko", "0", 500));
         s.pushToHistory(new Action("login"));
         s.pushToHistory(new Transfer(acc5, acc6, Money(30)));
         s.pushToHistory(new Action("changed PIN"));

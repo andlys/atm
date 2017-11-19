@@ -42,11 +42,11 @@ private:
     Session* _currentSession;
     //class BanknoteManager;
     BanknoteManager* _banknoteManager;
-    Bank* _bank;
+    Bank* const _bank;
     const string _address;
     friend void test_session(void); // TODO comment
 public:
-    ATM(Bank&);
+    ATM(Bank* const);
     ~ATM();
 	Account* login(const string&, const string&);
 	Account* logout();

@@ -1,10 +1,10 @@
 #include "ATM.h"
 
 
-ATM::ATM(Bank& bank):
+ATM::ATM(Bank* const bank):
         _currentSession(0),
         _banknoteManager(new BanknoteManager()),
-        _bank(&bank){}
+        _bank(bank){}
 
 ATM::~ATM(){
     delete _currentSession;

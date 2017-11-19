@@ -1,8 +1,13 @@
 #pragma once
+
+#include <string>
+
 struct Money {
 private:
 	unsigned long long _coins;
 
+    // currency code
+    const std::string _code;
 public:
   // accepts number of coins
 	Money(const unsigned long long);
@@ -15,6 +20,7 @@ public:
 
   // const unsigned long long& coins(); // TODO delete this line, the method below already can handle this
   const unsigned long long& coins() const;
+  const std::string& code() const { return _code; }
   Money& operator+=(const Money&);
   Money& operator-=(const Money&);
 };

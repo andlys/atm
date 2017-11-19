@@ -16,6 +16,7 @@ int main() {
     Money m3 = (Money (6666)) * 100;
     cout << m3.coins() << endl;
     cout << double(m3) << endl;
+    cout << m3.code() << endl;
 
     Money comission = (Money (10000)) * 3;
     cout << comission.coins() << endl;
