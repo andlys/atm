@@ -97,20 +97,17 @@ public:
 
 	const MoneyDisposal getCash(unsigned int cash) {
 		if (!enoughMoney(cash)) {
-			return MoneyDisposal(vector<Banknote>{}, false);
+			return MoneyDisposal(vector<Banknote>{}, "Operation failed: Not Enough Money in ATM");
 		}
 		////500, 200, 100, 50, 20, 10, 5, 2, 1
 		vector<int> values = { 500, 200, 100, 50, 20, 10, 5, 2, 1 };
 		vector<int> amounts = this->amounts();
-		vector<vector<int>> banknotesResult = solutions(values, amounts, vector<int>(9), cash, 0);
+		vector<vector<int>> banknotesResult = solutions(values, amounts, vector<int>(values.size()), cash, 0);
 		if (banknotesResult.size() == 0) {
-			return MoneyDisposal(vector<Banknote>{}, false);
-		}
-		for (int i = 0; i < banknotesResult[0].size(); ++i) {
-			cout << banknotesResult[0][i] << endl;
+			return MoneyDisposal(vector<Banknote>{}, "Operation failed: No such banknotes in ATM");
 		}
 		vector<Banknote> res = banknotes(banknotesResult[0]);
 
-		return MoneyDisposal(res, true);
+		return MoneyDisposal(res);
 	}
 };

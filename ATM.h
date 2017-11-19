@@ -1,41 +1,56 @@
-//
-//  ATM.h
-//  Bank
-//
-//  Created by Denys Melnychenko on 11/13/17.
-//  Copyright © 2017 Denys Melnychenko. All rights reserved.
-//
-
-#ifndef ATM_h
-#define ATM_h
-
-#include <stdio.h>
+#pragma once
 #include <iostream>
+#include <vector>
+#include <map>
 #include "Bank.h"
+#include "Action.h"
+#include "Account.h"
+#include "Transfer.h"
+#include <string>
+#include "Banknote.h"
+#include "BanknoteManager.h"
 
-class ATM{
+using namespace std;
+
+class ATM {
 private:
-    class Session;
+	class Session {
+	private:
+		vector<const Action*> _history;
+		Account* _account;
+		bool writeToFile() {
+			for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
+				// TODO send to file
+				cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
+			}
+			return false; // TODO
+		}
+	public:
+		Session(Account* acc) : _account(acc) {}
+		~Session() {
+			writeToFile();
+			delete _account;
+			return;
+		};
+
+		Account* account() const { return _account; }
+		Session& pushToHistory(const Action* action) {
+			_history.push_back(action);
+			return *this;
+		}
+	};
     Session* _currentSession;
-    class BanknoteManager;
+    //class BanknoteManager;
     BanknoteManager* _banknoteManager;
     Bank* _bank;
+    const string _address;
+    friend void test_session(void); // TODO comment
 public:
-    ATM(BanknoteManager&, Bank&);
-    // Just for testing.
-    ATM(Bank& bank):_currentSession(0),
-                    _banknoteManager(0),
-                    _bank(&bank){}
+    ATM(Bank&);
     ~ATM();
-    Account* login(const string&, const string&);
-    Account* logout();
-    
-    Account* currentAccount();
-    
+	Account* login(const string&, const string&);
+	Account* logout();
+	Account* currentAccount();
     bool transfer(const string&, const Money&);
-    bool withdrow(const Money&);
-    
+	MoneyDisposal withdrow(const Money& money);
 };
-
-#endif /* ATM_h */
-

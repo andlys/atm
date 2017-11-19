@@ -1,19 +1,18 @@
 #pragma once
 #include "Action.h"
 #include "Banknote.h"
-#include <iostream>
 #include <vector>
 #include <string>
 
 using namespace std;
 class BanknoteManager;
 
-class MoneyDisposal : Action {
+class MoneyDisposal : public Action {
 	friend BanknoteManager;
 private:
 	vector<Banknote> _banknotes;
-	bool _success;
-	MoneyDisposal(const vector<Banknote> banknotes, const bool success) : _banknotes(banknotes), _success(success) {
+	string _message;
+	MoneyDisposal(const vector<Banknote> banknotes, const string message = "Successful Withdrawal") : _banknotes(banknotes), _message(message) {
 		return;
 	}
 	const string do_toString() const {
@@ -21,15 +20,15 @@ private:
 	}
 public:
 	~MoneyDisposal() {}
-	inline const bool success() const { return _success; };
+	inline const string message() const { return _message; };
 	const vector<Banknote>& banknotes() const { return _banknotes; };
 };
 
 ostream& operator<<(ostream &os, const MoneyDisposal &md) {
 	os << "|--------------------|" << endl;
-	os << "Is Success: " << (md.success() ? "Success" : "Fail(Not enough Money in ATM)") << endl;
+	os << "Message: " << md.message() << endl;
 	vector<Banknote> bn = md.banknotes();
-	if (md.success())
+	if (!md.banknotes().empty())
 		os << "----------------------" << endl;
 	for (int i = 0; i < bn.size(); ++i) {
 		cout << bn[i] << endl;

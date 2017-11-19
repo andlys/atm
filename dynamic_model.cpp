@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "lib/fmt-4.0.0/fmt/format.h"
-#include "lib/fmt-4.0.0/fmt/printf.h"
+#include "lib/fmt/format.h"
+#include "lib/fmt/printf.h"
 #include "ATM.h"
 
 using std::cout;
@@ -119,7 +119,16 @@ void DynamicModel::menuDoPrintBalance() {
 }
 
 void DynamicModel::menuDoWithdraw() {
-    cout << "(withdrawing money...)" << endl;
+	int cash = 0;
+	cout << "Enter the amount you want to withdraw: " << endl;
+	while (!(cin >> cash) || cash < 0)
+	{
+		cout << "Bad input - try again: ";
+		cin.clear();
+		cin.ignore(INT_MAX, '\n');
+	}
+	cout << "Please wait ..." << endl;
+	cout << _atm->withdrow(Money(cash * 100)) << endl;
 }
 
 void DynamicModel::menuDoTransfer() {
@@ -146,7 +155,7 @@ void DynamicModel::menuDoIncorrectOption() {
 }
 
 int main() {
-    DynamicModel model(nullptr);
+	DynamicModel model(new ATM(Bank(vector<Account*>{})));
     model.initialize();
     return 0;
 }
