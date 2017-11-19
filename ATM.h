@@ -18,11 +18,13 @@ private:
     Session* _currentSession;
     //class BanknoteManager;
     BanknoteManager* _banknoteManager;
-    Bank* const _bank;
+    //Bank* const _bank;
+    Bank& _bank;
     const string _address;
     friend void test_session(void); // TODO comment
 public:
-    ATM(Bank* const);
+    //ATM(Bank* const);
+    ATM(Bank&);
     ~ATM();
 	Account* login(const string&, const string&);
 	Account* logout();

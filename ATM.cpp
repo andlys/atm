@@ -1,17 +1,5 @@
 #include "ATM.h"
 
-
-ATM::ATM(Bank* const bank):
-        _currentSession(0),
-        _banknoteManager(new BanknoteManager()),
-        _bank(bank){}
-
-ATM::~ATM(){
-    delete _currentSession;
-    delete _bank;
-    delete _banknoteManager;
-}
-
 class ATM::Session {
 private:
     vector<const Action*> _history;
@@ -38,8 +26,19 @@ public:
     }
 };
 
+ATM::ATM(Bank& bank):
+        _currentSession(0),
+        _banknoteManager(new BanknoteManager()),
+        _bank(bank){}
+
+ATM::~ATM(){
+    delete _currentSession;
+    //delete _bank;
+    delete _banknoteManager;
+}
+
 Account* ATM::login(const string& cardNum, const string& pass) {
-	Account* acc = _bank->getAccount(cardNum, pass);
+	Account* acc = _bank.getAccount(cardNum, pass);
 	if (acc)
 		_currentSession = new Session(acc);
 	return acc;
@@ -60,9 +59,8 @@ Account* ATM::currentAccount() {
 
 // Not secure if session not initiaized.
 bool ATM::transfer(const string& to, const Money& amount) {
-    Transfer transfer(_currentSession->account(), _bank->getAccount(to), amount);
-    Account* a = _currentSession->account();
-    return _bank->transfer(transfer);
+    Transfer transfer(_currentSession->account(), _bank.getAccount(to), amount);
+    return _bank.transfer(transfer);
 }
 
 // copying constructor of MoneyDisposal is invoked twice in this method TODO fix
