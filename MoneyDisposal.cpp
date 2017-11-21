@@ -8,7 +8,7 @@ MoneyDisposal::~MoneyDisposal() {
 	return;
 }
 
-inline ostream& operator<<(ostream &os, const MoneyDisposal &md) {
+ostream& operator<<(ostream &os, const MoneyDisposal &md) {
 	os << "|--------------------|" << endl;
 	os << "Message: " << md.message() << endl;
 	vector<Banknote> bn = md.banknotes();

@@ -26,6 +26,4 @@ public:
 	const vector<Banknote>& banknotes() const { return _banknotes; };
 };
 
-inline ostream& operator<<(ostream &os, const MoneyDisposal &md);
-
-
+ostream& operator<<(ostream &os, const MoneyDisposal &md);
