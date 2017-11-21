@@ -52,6 +52,7 @@ void DynamicModel::doPressEnterToContinue() {
 }
 
 void DynamicModel::initialize() {
+    // menuDoTransfer();
     // while (true) {
         processLogin();
         // doPressEnterToContinue();
@@ -121,7 +122,7 @@ void DynamicModel::processMenuInteraction() {
 
 void DynamicModel::menuDoPrintBalance() {
     cout << "(printing balance...)" << endl;
-    // fmt::printf("Your balance is %f %s",
+    // fmt::printf("Your balance is %.2f %s",
     //     double( atm->currentAccount()->balance() ),
     //     atm->currentAccount()->balance()->code());
 }
@@ -134,7 +135,7 @@ void DynamicModel::menuDoWithdraw() {
     unsigned int amount;
     cin.clear();
     cin.ignore(10000, '\n');
-    cin >> amount; // TODO loop until data is valid - valid???
+    cin >> amount;
     cout << _atm->withdraw(amount) << endl;
     // if ( !vector.empty() ) {
     //     cout << "Success" << endl;
@@ -150,35 +151,53 @@ void DynamicModel::menuDoTransfer() {
     cout << "Input recipient's card id" << endl;
     string recipientCardId;
     cin >> recipientCardId;
-    cout << "Input amount of money to transfer (floating point, precision up to 0.01): ";
     double amount;
     while (true) {
+        cout << "Input amount of money to transfer (floating point, precision up to 0.01): ";
         cin.clear();
         cin.ignore(10000, '\n');
         cin >> amount;
-        if ( (long(amount*100) % 1 != 0) || (amount < 0) )
+        if ( (amount < 0) || Money(amount * 100).coins() == 0 )
             cout << "Invalid amount!" << endl;
         else
             break;
     }
-    Money money(amount * 100); // double to coins
-    // TODO Money copying constructor;
-    // BEWARE: it is resposibility of ATM and Bank to withdraw commission!
-    // check if enough money (including commission)
-    // Account* const recipient = atm->getAccountById();
-    // check if recipient is not blocked!
-    // if (account) {
-    //     fmt::printf("Are you sure to make a transer of %f %s to #%s (%s)",
-    //         double(money), money->code(),
-    //         recipient->cardNumber(), recipient->fullName());
-    //     // cin  y/n
-    //     if ( atm->transer(recipientCardId, money) )
-    //         cout << "Success!" << endl;
-    //     else
-    //         cout << "Failure: request was declined by ATM!" << endl
-    // } else {
-    //     cout << "Invalid recipient's card id" << endl;
-    // }
+    Money money(amount * 100); // convert to coins
+    cout << double(money) << " is ok" << endl; // TODO delete
+    const Money& total = money * (100 + _atm->bank()._commissionTransfer);
+    fmt::printf("Transfer plus commission of %d %c costs %.2f %s\n",
+        _atm->bank()._commissionTransfer, '%',
+        double(total), total.code());
+    if (/*_atm->currentAccount()->balance() >= total*/ true) {
+        const Account* recipient = _atm->getAccount(recipientCardId);
+        // TODO check if recipient is not blocked!
+        if (recipient) {
+            fmt::printf("Are you sure to make a transer of %.2f %s to #%s (%s)",
+                double(money), money.code(),
+                recipient->cardNumber(), recipient->fullName());
+            while (true) {
+                cout << "Enter y/n: ";
+                string answer;
+                cin >> answer;
+                if (answer == "y" || answer == "Y") {
+                    if ( _atm->transfer(recipientCardId, money) )
+                        cout << "Success!" << endl;
+                    else
+                        cout << "Failure: request was declined by ATM" << endl;
+                    break;
+                } else if (answer == "n" || answer == "N") {
+                    cout << "Operation was discarded!" << endl;
+                    break;
+                } else
+                    continue; // explicit
+            }
+        } else {
+            cout << "Failure: invalid recipient's card id" << endl;
+        }
+    } else {
+        cout << "Failure: you don't have enough money!" << endl;
+    }
+    doPressEnterToContinue();
 }
 
 void DynamicModel::menuDoChangePhone() {
@@ -226,7 +245,9 @@ void DynamicModel::menuDoIncorrectOption() {
 }
 
 int main() {
-    DynamicModel model(new ATM(new Bank(vector<Account*>{})));
+    // TODO fill the vector with accounts...
+    Bank bank(vector<Account*>{}); // TODO change to singleton selector
+    DynamicModel model(new ATM(bank));
     model.initialize();
     return 0;
 }
