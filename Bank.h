@@ -30,6 +30,7 @@ public:
     //bool withdraw(const Account&, const Money&);
     bool withdraw(const Account&, MoneyDisposal&);
     bool changePIN(Account*, const string&, const string&);
+    void blockAccount(const string&);
 
     Account* getAccount(const string&, const string&);
 

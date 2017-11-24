@@ -17,12 +17,14 @@ private:
     string _phoneNumber;
     Money* _balance;
     string _password;
+    bool _blocked;
     //vector<Action> _history; // TODO
     bool isValid(const string&, const string&);
     Account(const Account &);
 public:
-	Account(string, string, unsigned long long);
-    Account(string, string, string, unsigned long long);
+	Account(string, string, unsigned long long); // TODO delete
+    Account(string card, string name, string pwd,
+        unsigned long long balance = 0, bool blocked = false);
 	~Account();
 
     // balance selector
@@ -31,4 +33,5 @@ public:
     const string& fullName() const { return _fullName; }
     const string& phoneNumber() const { return _phoneNumber; }
     void updateHistory(const vector<Action>&);
+    bool isBlocked() const { return _blocked; }
 };

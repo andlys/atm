@@ -21,12 +21,17 @@ private:
     //Bank* const _bank;
     Bank& _bank;
     const string _address;
+    unsigned int _attemptsLeft;
+    string _lastAttemptedCardNumber;
     friend void test_session(void); // TODO comment
 public:
     //ATM(Bank* const);
     ATM(Bank&);
     ~ATM();
 	Account* login(const string&, const string&);
+    // returns number of attempts left, starting from tree (before first call)
+	unsigned int loginAttemptsLeft() { return _attemptsLeft; }
+    bool isloggedIn() { return _currentSession != 0; }
 	Account* logout();
 	Account* currentAccount();
     bool transfer(const string&, const Money&);

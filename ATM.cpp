@@ -29,7 +29,9 @@ public:
 ATM::ATM(Bank& bank):
         _currentSession(0),
         _banknoteManager(new BanknoteManager()),
-        _bank(bank){}
+        _bank(bank),
+        _attemptsLeft(3),
+        _lastAttemptedCardNumber(""){}
 
 ATM::~ATM(){
     delete _currentSession;
@@ -40,9 +42,19 @@ ATM::~ATM(){
 Account* ATM::login(const string& cardNum, const string& pass) {
     if (_currentSession)
         logout();
-	Account* acc = _bank.getAccount(cardNum, pass);
-	if (acc)
-		_currentSession = new Session(acc);
+    Account* acc = 0;
+    if (_lastAttemptedCardNumber != cardNum) {
+        _attemptsLeft = 3;
+        _lastAttemptedCardNumber = cardNum;
+    }
+    if (_attemptsLeft) {
+        _attemptsLeft--;
+    	acc = _bank.getAccount(cardNum, pass);
+    	if (acc)
+    		_currentSession = new Session(acc);
+        else if (_attemptsLeft == 0)
+            _bank.blockAccount(cardNum);
+    }
 	return acc;
 }
 
@@ -52,6 +64,8 @@ Account* ATM::logout() {
         acc = _currentSession->account();
         delete _currentSession;
 	    _currentSession = 0;
+        _attemptsLeft = 3;
+        _lastAttemptedCardNumber = "";
     }
 	return acc;
 }
@@ -65,6 +79,7 @@ Account* ATM::currentAccount() {
 // Not secure if session not initiaized.
 bool ATM::transfer(const string& to, const Money& amount) {
     Transfer transfer(_currentSession->account(), _bank.getAccount(to), amount);
+    _currentSession->pushToHistory(&transfer); // TODO check
     return _bank.transfer(transfer);
 }
 

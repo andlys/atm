@@ -7,11 +7,12 @@ Account::Account(string cardNumber, string password, unsigned long long balance 
                 _balance(new Money(balance)){}
 
 Account::Account(string cardNumber, string name, string password,
-    unsigned long long balance = 0):
+    unsigned long long balance, bool blocked):
                 _cardNumber(cardNumber),
                 _fullName(name),
                 _password(password),
-                _balance(new Money(balance)){}
+                _balance(new Money(balance)),
+                _blocked(blocked){}
 
 /*Account::Account(Account const & acc):
                 _cardNumber(acc.cardNumber()),

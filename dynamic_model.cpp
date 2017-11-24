@@ -26,8 +26,8 @@ const string greetingPattern("Login successful\n\n"
 class DynamicModel {
 private:
     ATM* const _atm;
-    void processLogin(void);
-    void processPINInput(void);
+    bool validateLogin(void);
+    bool validatePINInput(const string&);
     void processMenuInteraction(void);
     void menuDoPrintBalance(void);
     void menuDoWithdraw(void);
@@ -54,52 +54,51 @@ void DynamicModel::doPressEnterToContinue() {
 void DynamicModel::initialize() {
     // menuDoTransfer();
     // while (true) {
-        processLogin();
+        if (validateLogin()) {
+            processMenuInteraction();
+        }
         // doPressEnterToContinue();
     // }
 }
 
-void DynamicModel::processLogin() {
+bool DynamicModel::validateLogin() {
     cout << "Hello! Please, sign in." << endl;
     cout << "Input card id: ";
     string card_id;
     cin >> card_id;
-    if (card_id == "42" || card_id == "24") {
-        bool isAccountBlocked = card_id == "24";
-        // TODO ask bank if there exists a user with the given card_id
-        // TODO if the user is blocked then show the message and forbid login for this card
-        if (isAccountBlocked) {
+    const Account* acc = _atm->getAccount(card_id);
+    if (acc) {
+        if (acc->isBlocked()) {
             cout << "Failure: can't proceed since your account is blocked. "
                     "Contact the service to resolve the issue." << endl;
-            return;
-        }
-        processPINInput();
+        } else
+            return validatePINInput(card_id);
     } else {
         cout << "Failure: can't proceed since card id is incorrect" << endl;
     }
+    return false;
 }
 
-void DynamicModel::processPINInput() {
-    for (unsigned int attempsLeft = 3; ; ) {
+bool DynamicModel::validatePINInput(const string& card_id) {
+    while (true) {
         string pin;
         cout << "Input PIN: ";
         cin >> pin; // TODO hide user input
-        if (pin == "1111") { // TODO ask bank if the user with the given card_id has the password
-            processMenuInteraction(); // login successful
-            break; // stop asking for PIN
+        if (_atm->login(card_id, pin)) {
+            return true;
         } else {
-            if (!--attempsLeft) {
-                cout << "Failure: you have exceeded three attempts! Card is blocked!" << endl;
-                break; // stop asking for PIN
+            if (_atm->loginAttemptsLeft()) {
+                fmt::printf("Incorrect PIN, %s attemps left\n", _atm->loginAttemptsLeft());
             } else {
-                fmt::printf("Incorrect PIN, %s attemps left\n", attempsLeft);
+                cout << "Failure: you have exceeded three attempts! Card is blocked!" << endl;
+                return false;
             }
         }
     }
 }
 
 void DynamicModel::processMenuInteraction() {
-    fmt::printf(greetingPattern, "Денис Мельниченко");
+    fmt::printf(greetingPattern, _atm->currentAccount()->fullName());
     cout << menu;
     bool exit = false;
     while (!exit) {
@@ -162,13 +161,13 @@ void DynamicModel::menuDoTransfer() {
         else
             break;
     }
-    Money money(amount * 100); // convert to coins
-    cout << double(money) << " is ok" << endl; // TODO delete
+    Money money(amount * 100); // converting to coins
+    // cout << double(money) << " is ok" << endl; // TODO delete
     const Money& total = money * (100 + _atm->bank()._commissionTransfer);
     fmt::printf("Transfer plus commission of %d %c costs %.2f %s\n",
         _atm->bank()._commissionTransfer, '%',
         double(total), total.code());
-    if (/*_atm->currentAccount()->balance() >= total*/ true) {
+    if (_atm->currentAccount()->balance() >= total) {
         const Account* recipient = _atm->getAccount(recipientCardId);
         // TODO check if recipient is not blocked!
         if (recipient) {
@@ -189,7 +188,7 @@ void DynamicModel::menuDoTransfer() {
                     cout << "Operation was discarded!" << endl;
                     break;
                 } else
-                    continue; // explicit
+                    continue; // explicitly continuing to accept attempts
             }
         } else {
             cout << "Failure: invalid recipient's card id" << endl;
@@ -246,7 +245,11 @@ void DynamicModel::menuDoIncorrectOption() {
 
 int main() {
     // TODO fill the vector with accounts...
-    Bank bank(vector<Account*>{}); // TODO change to singleton selector
+    Bank bank(vector<Account*>{ // TODO change to singleton selector
+        new Account("42", "Nassim Taleb", "1111", 10000),
+        new Account("24", "Денис Мельниченко", "2222", 20000),
+        new Account("55", "Umberto Eko", "3333", 30000, true)
+    });
     DynamicModel model(new ATM(bank));
     model.initialize();
     return 0;

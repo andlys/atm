@@ -8,6 +8,13 @@ Bank::Bank(vector<Account*> accounts):
 
 Bank::~Bank(){}
 
+void Bank::blockAccount(const string& cardNum) {
+    Account* acc = getAccount(cardNum);
+    if (acc)
+        acc->_blocked = true;
+    cout << "Bank: account " << cardNum << " is blocked!" << endl; // TODO del
+}
+
 const Account& Bank::addToBalance(const Money& amount, Account& target){
     *target._balance += amount;
     return target;
