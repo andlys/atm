@@ -85,7 +85,44 @@ bool ATM::transfer(const string& to, const Money& amount) {
 
 // copying constructor of MoneyDisposal is invoked twice in this method TODO fix
 MoneyDisposal ATM::withdraw(unsigned int cash) {
+	Money money(cash * 100);
+	Money commission = money * _bank._commissionWithdrawal;
+	Money totalWithdraw = commission + money;
+	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
+		throw new exception("Not enough money in your account!");
+	}
+	
 	const MoneyDisposal md = _banknoteManager->getCash(cash);
 	_currentSession->pushToHistory(&md);
+	if (md.isSuccess()) {
+		_bank.withdraw(*currentAccount(), Money(cash * 100));
+	}
 	return md;
+}
+
+bool ATM::changePIN(const string & oldP, const string & newP) {
+	if (_bank.changePIN(currentAccount(), oldP, newP)) {
+		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " change PIN"));
+		return true;
+	}
+	return false;
+}
+
+bool ATM::changePhoneNumber(const string& oldPhone, const string& newPhone) {
+	if (_bank.changePhone(currentAccount(), oldPhone, newPhone)) {
+		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " change Phone from: " + oldPhone + " to: " + newPhone));
+		return true;
+	}
+	return false;
+}
+
+bool ATM::phoneReplenishment(const string &phone, const Money &money) {
+	Money commission = money * _bank._commissionMobileReplenishment;
+	Money totalWithdraw = commission + money;
+	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
+		// maybe -> return false;
+		throw new exception("Not enough money in your account!");
+	}
+
+	return _bank.phoneReplenishment(currentAccount(), phone, money);
 }

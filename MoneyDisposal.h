@@ -24,6 +24,7 @@ public:
 	~MoneyDisposal();
 	inline const string message() const { return _message; };
 	const vector<Banknote>& banknotes() const { return _banknotes; };
+	inline bool isSuccess() const { return !_banknotes.empty(); };
 };
 
 ostream& operator<<(ostream &os, const MoneyDisposal &md);

@@ -27,9 +27,12 @@ public:
     //TODO singleton
     static Bank getBank();
     bool transfer(Transfer&);
-    //bool withdraw(const Account&, const Money&);
-    bool withdraw(const Account&, MoneyDisposal&);
+	bool checkIsEnough(const Account&, const Money&);
+    bool withdraw(Account&, const Money&);
+    //bool withdraw(const Account&, const MoneyDisposal&);
     bool changePIN(Account*, const string&, const string&);
+	bool changePhone(Account*, const string&, const string&);
+	bool phoneReplenishment(Account*, const string&, const Money&);
     void blockAccount(const string&);
 
     Account* getAccount(const string&, const string&);

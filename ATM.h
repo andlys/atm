@@ -5,6 +5,7 @@
 #include "Bank.h"
 #include "Action.h"
 #include "Account.h"
+#include "AccountAction.h"
 #include "Transfer.h"
 #include <string>
 #include "Banknote.h"
@@ -36,6 +37,9 @@ public:
 	Account* currentAccount();
     bool transfer(const string&, const Money&);
 	MoneyDisposal withdraw(unsigned int);
+	bool changePIN(const string&, const string&);
+	bool changePhoneNumber(const string&, const string&);
+	bool phoneReplenishment(const string&, const Money&);
     // it is safe since Bank is const
     const Bank& bank() { return _bank; }
     // it is safe since Account is const

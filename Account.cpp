@@ -1,5 +1,6 @@
 #include "Account.h"
-
+#include <iostream>
+using namespace std;
 //TODO delete this constructor
 Account::Account(string cardNumber, string password, unsigned long long balance = 0):
                 _cardNumber(cardNumber),
@@ -19,7 +20,9 @@ Account::Account(string cardNumber, string name, string password,
                 _password(acc.password()),
                 _balance(new Money(acc.balance())){}*/
 
-Account::~Account(){delete _balance;}
+Account::~Account(){
+	delete _balance;
+}
 
 bool Account::isValid(const string& cardNum, const string& pass){
     return cardNum == _cardNumber && pass == _password ;

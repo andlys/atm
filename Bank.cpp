@@ -41,7 +41,7 @@ Account* Bank::getAccount(const string& cardNum){
     return 0;
 }
 
-bool Bank::transfer(Transfer& t){
+bool Bank::transfer(Transfer& t) {
     Money commission = t.amount() * _commissionTransfer;
     Money totalWithdraw = commission + t.amount();
     t._success = (*t.from()->_balance >= totalWithdraw);
@@ -52,6 +52,42 @@ bool Bank::transfer(Transfer& t){
     return t._success;
 }
 
-bool Bank::changePIN(Account* acc, const string& oldP, const string& newP){
-    return 0;
+bool Bank::checkIsEnough(const Account &account, const Money &money) {
+	return *account._balance >= money;
+}
+
+bool Bank::withdraw(Account &account, const Money &money) {
+	Money commission = money * _commissionWithdrawal;
+	Money totalWithdraw = commission + money;
+	if (checkIsEnough(account, totalWithdraw)) {
+		*account._balance -= totalWithdraw;
+		return true;
+	}
+	return false;
+}
+
+bool Bank::changePIN(Account* acc, const string& oldP, const string& newP) {
+	if (acc->_password == oldP) {
+		acc->_password = newP;
+		return true;
+	}
+    return false;
+}
+
+bool Bank::changePhone(Account *acc, const string& oldPhone, const string& newPhone) {
+	if (acc->_phoneNumber == oldPhone) {
+		acc->_phoneNumber = newPhone;
+		return true;
+	}
+	return false;
+}
+
+bool Bank::phoneReplenishment(Account *acc, const string &phone, const Money &money) {
+	Money commission = money * _commissionMobileReplenishment;
+	Money totalWithdraw = commission + money;
+	if (checkIsEnough(*acc, totalWithdraw)) {
+		*acc->_balance -= totalWithdraw;
+		return true;
+	}
+	return false;
 }
