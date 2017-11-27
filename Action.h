@@ -12,12 +12,13 @@ private:
 	virtual const string do_toString() const {
 		return _content;
 	}
-public:
+protected:
     // present since our derived classes use base constuctor of no args
 	Action():
         _datetime(time(nullptr)) {}
     Action(const string& content):
         _datetime(time(nullptr)), _content(content) {}
+public:
     virtual ~Action() {};
 
     // It seems better to return string, not string&

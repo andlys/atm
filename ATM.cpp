@@ -84,12 +84,13 @@ bool ATM::transfer(const string& to, const Money& amount) {
 }
 
 // copying constructor of MoneyDisposal is invoked twice in this method TODO fix
-MoneyDisposal ATM::withdraw(unsigned int cash) {
+const MoneyDisposal ATM::withdraw(unsigned int cash) {
 	Money money(cash * 100);
 	Money commission = money * _bank._commissionWithdrawal;
 	Money totalWithdraw = commission + money;
 	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
-		throw new exception("Not enough money in your account!");
+		const MoneyDisposal md = _banknoteManager->getCash(0);
+		return md;
 	}
 	
 	const MoneyDisposal md = _banknoteManager->getCash(cash);
@@ -120,9 +121,12 @@ bool ATM::phoneReplenishment(const string &phone, const Money &money) {
 	Money commission = money * _bank._commissionMobileReplenishment;
 	Money totalWithdraw = commission + money;
 	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
-		// maybe -> return false;
-		throw new exception("Not enough money in your account!");
+		return false;
 	}
-
-	return _bank.phoneReplenishment(currentAccount(), phone, money);
+	if (_bank.phoneReplenishment(currentAccount(), phone, money)) {
+		string replenishedMoney = std::to_string((double)money);
+		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " replenished the phone: " + phone + " on sum: " + replenishedMoney));
+		return true;
+	}
+	return false;
 }

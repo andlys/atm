@@ -95,6 +95,7 @@ BanknoteManager::~BanknoteManager() {
 
 const MoneyDisposal BanknoteManager::getCash(unsigned int cash)
 {
+	if (cash == 0 ) return MoneyDisposal(vector<Banknote>{}, "Operation failed: You are trying to get a zero banknote");
 	if (!enoughMoney(cash)) {
 		return MoneyDisposal(vector<Banknote>{}, "Operation failed: Not Enough Money in ATM");
 	}
@@ -107,5 +108,5 @@ const MoneyDisposal BanknoteManager::getCash(unsigned int cash)
 	}
 	vector<Banknote> res = banknotes(banknotesResult[0]);
 
-	return MoneyDisposal(res);
+	return MoneyDisposal(res, "Successful Withdrawal");
 }

@@ -16,6 +16,7 @@ class MoneyDisposal : public Action {
 private:
 	vector<Banknote> _banknotes;
 	string _message;
+	MoneyDisposal() {};
 	MoneyDisposal(const vector<Banknote> banknotes, const string message = "Successful Withdrawal");
 	const string do_toString() const {
 		return "TODO toString on MoneyDisposal!!";
