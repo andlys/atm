@@ -1,17 +1,32 @@
 #include "ATM.h"
+#include <fstream>
+#include "lib/json/json.hpp"
 
 class ATM::Session {
 private:
     vector<const Action*> _history;
     Account* _account;
     bool writeToFile() {
-        cout << "Your history of this session: " << endl; // TODO del
+        //nlohmann::json hist [_history.size()];
+        std::ofstream out("test.json");
+        auto hist = nlohmann::json::array();
+        /*nlohmann::json hJson = {
+         {"card_id", _account->cardNumber()},
+         {"history", nlohmann::json::array()}
+         };*/
+        cout << _history.size() << endl;
         for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
-            // TODO send to file
-            cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
-            delete *it; // TODO check later
+            nlohmann::json j = {
+                {"datetime","13"},
+                {"action", "action"}
+            };
+            //hist[i] = j;
+            hist.push_back(j);
+            out << "f" << endl;
+            out << std::setw(2) << j << endl;
+            
         }
-        return false; // TODO
+        return false;
     }
 public:
     Session(Account* acc) : _account(acc) {}
