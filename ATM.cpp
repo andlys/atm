@@ -5,9 +5,11 @@ private:
     vector<const Action*> _history;
     Account* _account;
     bool writeToFile() {
+        cout << "Your history of this session: " << endl; // TODO del
         for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
             // TODO send to file
             cout << (*it)->datetimeString() << " - " << (*it)->toString() << endl;
+            delete *it; // TODO check later
         }
         return false; // TODO
     }
@@ -50,8 +52,10 @@ Account* ATM::login(const string& cardNum, const string& pass) {
     if (_attemptsLeft) {
         _attemptsLeft--;
     	acc = _bank.getAccount(cardNum, pass);
-    	if (acc)
+    	if (acc) {
     		_currentSession = new Session(acc);
+            _currentSession->pushToHistory(new AccountAction("Signed in"));
+        }
         else if (_attemptsLeft == 0)
             _bank.blockAccount(cardNum);
     }
@@ -62,6 +66,7 @@ Account* ATM::logout() {
 	Account* acc = 0;
     if (_currentSession) {
         acc = _currentSession->account();
+        _currentSession->pushToHistory(new AccountAction("Logged out"));
         delete _currentSession;
 	    _currentSession = 0;
         _attemptsLeft = 3;
@@ -78,9 +83,9 @@ Account* ATM::currentAccount() {
 
 // Not secure if session not initiaized.
 bool ATM::transfer(const string& to, const Money& amount) {
-    Transfer transfer(_currentSession->account(), _bank.getAccount(to), amount);
-    _currentSession->pushToHistory(&transfer); // TODO check
-    return _bank.transfer(transfer);
+    Transfer* transfer = new Transfer(_currentSession->account(), _bank.getAccount(to), amount);
+    _currentSession->pushToHistory(transfer);
+    return _bank.transfer(*transfer);
 }
 
 // copying constructor of MoneyDisposal is invoked twice in this method TODO fix
@@ -92,18 +97,19 @@ const MoneyDisposal ATM::withdraw(unsigned int cash) {
 		const MoneyDisposal md = _banknoteManager->getCash(0);
 		return md;
 	}
-	
 	const MoneyDisposal md = _banknoteManager->getCash(cash);
-	_currentSession->pushToHistory(&md);
 	if (md.isSuccess()) {
 		_bank.withdraw(*currentAccount(), Money(cash * 100));
+        //_currentSession->pushToHistory(&md);
+        _currentSession->pushToHistory(new AccountAction(fmt::format(
+            "Withdrawn {} uah", cash))); // TODO refactor and change to md
 	}
 	return md;
 }
 
 bool ATM::changePIN(const string & oldP, const string & newP) {
 	if (_bank.changePIN(currentAccount(), oldP, newP)) {
-		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " change PIN"));
+		_currentSession->pushToHistory(new AccountAction("PIN changed"));
 		return true;
 	}
 	return false;
@@ -111,7 +117,9 @@ bool ATM::changePIN(const string & oldP, const string & newP) {
 
 bool ATM::changePhoneNumber(const string& oldPhone, const string& newPhone) {
 	if (_bank.changePhone(currentAccount(), oldPhone, newPhone)) {
-		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " change Phone from: " + oldPhone + " to: " + newPhone));
+        Action* action = new AccountAction(fmt::format(
+            "Phone number changed from {} to {}", oldPhone, newPhone));
+        _currentSession->pushToHistory(action);
 		return true;
 	}
 	return false;
@@ -120,12 +128,11 @@ bool ATM::changePhoneNumber(const string& oldPhone, const string& newPhone) {
 bool ATM::phoneReplenishment(const string &phone, const Money &money) {
 	Money commission = money * _bank._commissionMobileReplenishment;
 	Money totalWithdraw = commission + money;
-	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
-		return false;
-	}
-	if (_bank.phoneReplenishment(currentAccount(), phone, money)) {
-		string replenishedMoney = std::to_string((double)money);
-		_currentSession->pushToHistory(new AccountAction("Account with card number: " + currentAccount()->cardNumber() + " replenished the phone: " + phone + " on sum: " + replenishedMoney));
+	if (_bank.checkIsEnough(*currentAccount(), totalWithdraw) &&
+        _bank.phoneReplenishment(currentAccount(), phone, money)) {
+		_currentSession->pushToHistory(new AccountAction(fmt::format(
+            "Replenished phone number {} with {} {}", phone,
+            double(money), money.code())));
 		return true;
 	}
 	return false;
