@@ -67,15 +67,15 @@ bool Bank::withdraw(Account &account, const Money &money) {
 }
 
 bool Bank::changePIN(Account* acc, const string& oldP, const string& newP) {
-	if (acc->_password == oldP) {
+	if (acc->_password == oldP && newP.length() == 4) {
 		acc->_password = newP;
 		return true;
 	}
     return false;
 }
 
-bool Bank::changePhone(Account *acc, const string& oldPhone, const string& newPhone) {
-	if (acc->_phoneNumber == oldPhone) {
+bool Bank::changePhone(Account *acc, const string& pin, const string& newPhone) {
+	if (acc->_password == pin && newPhone.length() == 10) {
 		acc->_phoneNumber = newPhone;
 		return true;
 	}

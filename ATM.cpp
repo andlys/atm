@@ -128,10 +128,11 @@ bool ATM::changePIN(const string & oldP, const string & newP) {
 	return false;
 }
 
-bool ATM::changePhoneNumber(const string& oldPhone, const string& newPhone) {
-	if (_bank.changePhone(currentAccount(), oldPhone, newPhone)) {
+bool ATM::changePhoneNumber(const string& pin, const string& newPhone) {
+	if (_bank.changePhone(currentAccount(), pin, newPhone)) {
         Action* action = new AccountAction(fmt::format(
-            "Phone number changed from {} to {}", oldPhone, newPhone));
+            "Phone number changed from {} to {}",
+            currentAccount()->phoneNumber(), newPhone));
         _currentSession->pushToHistory(action);
 		return true;
 	}
