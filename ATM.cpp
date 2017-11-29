@@ -8,21 +8,19 @@ private:
     Account* _account;
     bool writeToFile() {
         //nlohmann::json hist [_history.size()];
-        std::ofstream out("test.json");
+        std::ofstream out("untest.json");
         auto hist = nlohmann::json::array();
         /*nlohmann::json hJson = {
          {"card_id", _account->cardNumber()},
          {"history", nlohmann::json::array()}
          };*/
-        cout << _history.size() << endl;
         for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
             nlohmann::json j = {
-                {"datetime","13"},
-                {"action", "action"}
+                {"datetime", (*it)->datetimeString()},
+                {"action", (*it)->toString()}
             };
             //hist[i] = j;
             hist.push_back(j);
-            out << "f" << endl;
             out << std::setw(2) << j << endl;
             
         }
