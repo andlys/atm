@@ -52,7 +52,6 @@ void DynamicModel::doPressEnterToContinue() {
 }
 
 void DynamicModel::initialize() {
-    // menuDoTransfer();
     // while (true) {
         if (validateLogin()) {
             processMenuInteraction();
@@ -63,7 +62,7 @@ void DynamicModel::initialize() {
 
 bool DynamicModel::validateLogin() {
     cout << "Hello! Please, sign in." << endl;
-    cout << "Input card id: ";
+    cout << "Insert your card (input card id): ";
     string card_id;
     cin >> card_id;
     const Account* acc = _atm->getAccount(card_id);
@@ -120,33 +119,40 @@ void DynamicModel::processMenuInteraction() {
 }
 
 void DynamicModel::menuDoPrintBalance() {
-    cout << "(printing balance...)" << endl;
-    // fmt::printf("Your balance is %.2f %s",
-    //     double( atm->currentAccount()->balance() ),
-    //     atm->currentAccount()->balance()->code());
+    fmt::printf("Your balance is %.2f %s\n",
+        double( _atm->currentAccount()->balance() ),
+        _atm->currentAccount()->balance().code());
 }
 
 void DynamicModel::menuDoWithdraw() {
-    cout << "(withdrawing money...)" << endl;
     // check if atm has at least some money???
     cout << "Available nominals: 5, 10, 20, 50, 100, TODO" << endl; // concat vector to string
-    cout << "Input amount of money to withdraw: ";
+    cout << "Input amount of money to withdraw (natural number): ";
     unsigned int amount;
     cin.clear();
     cin.ignore(10000, '\n');
     cin >> amount;
-    cout << _atm->withdraw(amount) << endl;
-    // if ( !vector.empty() ) {
-    //     cout << "Success" << endl;
-    // } else {
-    //     cout << "Failure: unable to give you this specific amount of money"
-    //          << "Please, try another amount"<< endl;
-    // }
+    Money money(amount * 100); // converting to coins
+    const Money& total = money * (100 + _atm->bank()._commissionWithdrawal);
+    fmt::printf("Withdrawal plus commission of %d %c costs %.2f %s\n",
+        _atm->bank()._commissionWithdrawal, '%',
+        double(total), total.code());
+    if (_atm->currentAccount()->balance() >= total) {
+        const MoneyDisposal& md = _atm->withdraw(amount);
+        if (md.banknotes().empty()) {
+            cout << "Failure: unable to give you this specific amount of money. "
+                 << "Please, try another amount"<< endl;
+        } else {
+            cout << "Success" << endl;
+            cout << md << endl;
+        }
+    } else {
+        cout << "Failure: you don't have enough money!" << endl;
+    }
     doPressEnterToContinue();
 }
 
 void DynamicModel::menuDoTransfer() {
-    cout << "(transfering money...)" << endl;
     cout << "Input recipient's card id" << endl;
     string recipientCardId;
     cin >> recipientCardId;
@@ -162,16 +168,14 @@ void DynamicModel::menuDoTransfer() {
             break;
     }
     Money money(amount * 100); // converting to coins
-    // cout << double(money) << " is ok" << endl; // TODO delete
     const Money& total = money * (100 + _atm->bank()._commissionTransfer);
     fmt::printf("Transfer plus commission of %d %c costs %.2f %s\n",
         _atm->bank()._commissionTransfer, '%',
         double(total), total.code());
     if (_atm->currentAccount()->balance() >= total) {
         const Account* recipient = _atm->getAccount(recipientCardId);
-        // TODO check if recipient is not blocked!
-        if (recipient) {
-            fmt::printf("Are you sure to make a transer of %.2f %s to #%s (%s)",
+        if (recipient && (!recipient->isBlocked())) {
+            fmt::printf("Are you sure to make a transer of %.2f %s to #%s (%s)\n",
                 double(money), money.code(),
                 recipient->cardNumber(), recipient->fullName());
             while (true) {
@@ -191,7 +195,8 @@ void DynamicModel::menuDoTransfer() {
                     continue; // explicitly continuing to accept attempts
             }
         } else {
-            cout << "Failure: invalid recipient's card id" << endl;
+            cout << "Failure: recipient's account is inaccessible:" <<
+            "either account is blocked or card id is incorrect" << endl;
         }
     } else {
         cout << "Failure: you don't have enough money!" << endl;
@@ -200,35 +205,45 @@ void DynamicModel::menuDoTransfer() {
 }
 
 void DynamicModel::menuDoChangePhone() {
-    cout << "(changing phone...)" << endl;
+    string pin;
+    cout << "Input your PIN: ";
+    cin >> pin; // TODO hide user input
+    string newPhone;
+    cout << "Input new phone number (phone number has strictly 10 digits, "
+         << "for example 0661234567): ";
+    cin >> newPhone;
+    if ( _atm->changePhoneNumber(pin, newPhone) ) {
+        cout << "Phone number has been changed successfully" << endl;
+    } else {
+        cout << "Failure: phone number was not changed: request was declined "
+             << "by the Bank. Either the pin is incorrect or "
+             << "the new phone number format is invalid" << endl;
+    }
+    doPressEnterToContinue();
 }
 
 void DynamicModel::menuDoChangePIN() {
-    cout << "(changing PIN...)" << endl;
-    // string oldPin;
-    // cout << "Input old PIN: ";
-    // cin >> oldPin; // TODO hide user input
-    // const string& cardNumber = atm->currentAccount()->cardNumber();
-    // if( atm->check( cardNumber , oldPin) ) {
-    //     string newPin;
-    //     cout << "Input new PIN: ";
-    //     cin >> newPin; // TODO hide user input
-    //     string newPinSecond;
-    //     cout << "Repeat new PIN: ";
-    //     cin >> newPinSecond; // TODO hide user input
-    //     if ( newPin.compare(newPinSecond) == 0 ) {
-    //         if ( atm->changePIN( cardNumber, oldPin, newPin) ) {
-    //             cout << "Password has been changed successfully" << endl;
-    //         } else {
-    //             cout << "Failure: password was not changed "
-    //                  << "(request was declined by the Bank)" << endl;
-    //         }
-    //     } else {
-    //         cout << "Failure: new password inputs do not match" << endl;
-    //     }
-    // } else {
-    //     cout << "Failure: old password is invalid" << endl;
-    // }
+    string oldPin;
+    cout << "Input old PIN: ";
+    cin >> oldPin; // TODO hide user input
+    string newPin;
+    cout << "Input new PIN (length of 4 characters): ";
+    cin >> newPin; // TODO hide user input
+    string newPin2;
+    cout << "Repeat new PIN once again: ";
+    cin >> newPin2; // TODO hide user input
+    if ( newPin.compare(newPin2) == 0 ) {
+        if ( _atm->changePIN(oldPin, newPin) ) {
+            cout << "Password has been changed successfully" << endl;
+        } else {
+            cout << "Failure: password was not changed: request was declined "
+                 << "by the Bank. Either the old password is incorrect or "
+                 << "the new one is invalid" << endl;
+        }
+    } else {
+        cout << "Failure: new password inputs do not match" << endl;
+    }
+    doPressEnterToContinue();
 }
 
 void DynamicModel::menuDoExit() {
