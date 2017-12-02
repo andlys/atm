@@ -7,25 +7,36 @@ private:
     vector<const Action*> _history;
     Account* _account;
     bool writeToFile() {
-        //nlohmann::json hist [_history.size()];
-        std::ofstream out("untest.json");
-        auto hist = nlohmann::json::array();
-        /*nlohmann::json hJson = {
-         {"card_id", _account->cardNumber()},
-         {"history", nlohmann::json::array()}
-         };*/
+        // Get history.
+        nlohmann::json j;
+        std::ifstream in("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+        in >> j;
+        
+        // Search for history of current account.
+        auto hist = j["histories"].begin();
+        for (; hist != j["histories"].end(); ++hist)
+        {
+            if (*hist->find("card_id") == _account->cardNumber()){
+                break;
+            }
+        }
+        
+        // Push new actions to history.
         for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
             nlohmann::json j = {
                 {"datetime", (*it)->datetimeString()},
                 {"action", (*it)->toString()}
             };
-            //hist[i] = j;
-            hist.push_back(j);
-            out << std::setw(2) << j << endl;
-            
+            hist->find("history")->push_back(j);
         }
+        
+        // Rewrite file.
+        std::ofstream out("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+        out << std::setw(2) << j << endl;
+        
         return false;
     }
+    
 public:
     Session(Account* acc) : _account(acc) {}
     ~Session() {
