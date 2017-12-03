@@ -162,3 +162,8 @@ bool ATM::phoneReplenishment(const string &phone, const Money &money) {
 	}
 	return false;
 }
+
+const vector<int> ATM::availableNominals() const
+{
+	return _banknoteManager->availableNominals();
+}

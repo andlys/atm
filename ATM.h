@@ -46,4 +46,5 @@ public:
     const Account* getAccount(const string& cardId) {
         return _bank.getAccount(cardId);
     }
+	const vector<int> availableNominals() const;
 };

@@ -9,6 +9,16 @@ vector<int> BanknoteManager::amounts() const
 	return amount;
 }
 
+const vector<int> BanknoteManager::availableNominals() const {
+	vector<int> nominals;
+	for (auto it = _available.begin(); it != _available.end(); ++it) {
+		if (!it->second.empty()) {
+			nominals.push_back(it->first);
+		}
+	}
+	return nominals;
+}
+
 vector<Banknote> BanknoteManager::banknotes(vector<int> nominals)
 {
 	vector<Banknote> banknotesRes;

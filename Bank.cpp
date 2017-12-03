@@ -1,5 +1,7 @@
 #include "Bank.h"
 
+Bank* Bank::_self = 0;
+
 Bank::Bank(vector<Account*> accounts):
     _accounts(accounts),
     _commissionWithdrawal(5),
@@ -39,6 +41,16 @@ Account* Bank::getAccount(const string& cardNum){
         if ((*it)->cardNumber() == cardNum) return *it;
     }
     return 0;
+}
+
+Bank* Bank::getBank() {
+	if (_self == 0)
+		_self = new Bank(vector<Account*>{
+				new Account("42", "Nassim Taleb", "1111", 10000),
+				new Account("24", "Денис Мельниченко", "2222", 20000),
+				new Account("55", "Umberto Eko", "3333", 30000, true)
+			});
+	return _self;
 }
 
 bool Bank::transfer(Transfer& t) {

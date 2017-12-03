@@ -2,6 +2,8 @@
 #include <string>
 #include "lib/fmt-4.0.0/fmt/format.h"
 #include "lib/fmt-4.0.0/fmt/printf.h"
+#include "lib/fmt-4.0.0/fmt/printf.cc" // should be excluded but i don't know...
+#include "lib/fmt-4.0.0/fmt/format.cc" // should be excluded but i don't know...
 #include "ATM.h"
 
 using std::cout;
@@ -260,12 +262,7 @@ void DynamicModel::menuDoIncorrectOption() {
 
 int main() {
     // TODO fill the vector with accounts...
-    Bank bank(vector<Account*>{ // TODO change to singleton selector
-        new Account("42", "Nassim Taleb", "1111", 10000),
-        new Account("24", "Денис Мельниченко", "2222", 20000),
-        new Account("55", "Umberto Eko", "3333", 30000, true)
-    });
-    DynamicModel model(new ATM(bank));
+    DynamicModel model(new ATM(*Bank::getBank()));
     model.initialize();
     return 0;
 }

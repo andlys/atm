@@ -10,22 +10,24 @@ using namespace std;
 class Bank
 {
 private:
+	static Bank *_self;
     vector<Account*> _accounts;
     const Account& addToBalance(const Money&, Account&);
     const Account& removeFromBalance(const Money&, Account&);
 
     // No copying constructor for bank.
     Bank(Bank&);
+protected:
+	~Bank();
 public:
     const unsigned int _commissionWithdrawal;
     const unsigned int _commissionTransfer;
     const unsigned int _commissionMobileReplenishment;
 
     Bank(vector<Account*>);
-    ~Bank();
-
-    //TODO singleton
-    static Bank getBank();
+    
+    static Bank* getBank();
+	void free() { delete _self; }
     bool transfer(Transfer&);
 	bool checkIsEnough(const Account&, const Money&);
     bool withdraw(Account&, const Money&);
