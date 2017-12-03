@@ -2,8 +2,6 @@
 #include <string>
 #include "lib/fmt-4.0.0/fmt/format.h"
 #include "lib/fmt-4.0.0/fmt/printf.h"
-#include "lib/fmt-4.0.0/fmt/printf.cc" // should be excluded but i don't know...
-#include "lib/fmt-4.0.0/fmt/format.cc" // should be excluded but i don't know...
 #include "ATM.h"
 
 using std::cout;
