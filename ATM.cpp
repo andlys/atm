@@ -84,7 +84,8 @@ public:
             for (auto it = j2.begin(); it != j2.end(); it++) {
                 string str = *it->find("datetime");
                 str += " ";
-                str += *it->find("action");
+				string temp = *it->find("action");
+                str += temp;
                 result.push_back(str);
             }
         }
