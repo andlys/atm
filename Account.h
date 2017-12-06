@@ -22,8 +22,8 @@ private:
     bool isValid(const string&, const string&);
     Account(const Account &);
 public:
-	Account(string, string, unsigned long long); // TODO delete
-    Account(string card, string name, string pwd,
+	//Account(string, string, unsigned long long); // TODO delete
+    Account(string card, string name, string phone, string pwd,
         unsigned long long balance = 0, bool blocked = false);
 	~Account();
 

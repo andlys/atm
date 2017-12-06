@@ -14,7 +14,7 @@ private:
     vector<Account*> _accounts;
     const Account& addToBalance(const Money&, Account&);
     const Account& removeFromBalance(const Money&, Account&);
-
+	static vector<Account*> getUsers();
     // No copying constructor for bank.
     Bank(Bank&);
 protected:

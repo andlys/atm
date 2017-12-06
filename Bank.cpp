@@ -1,4 +1,7 @@
 #include "Bank.h"
+#include <string>
+#include <fstream>
+#include "lib/json/json.hpp"
 
 Bank* Bank::_self = 0;
 
@@ -27,6 +30,33 @@ const Account& Bank::removeFromBalance(const Money& amount, Account& target){
     return target;
 }
 
+vector<Account*> Bank::getUsers() {
+	vector<Account*> accounts;
+
+	std::ifstream in("accounts_sample.json");
+	if (!in.is_open()) {
+		cout << "No such file" << endl;
+	}
+	else {
+		string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+		auto s = nlohmann::json::parse(str.c_str());
+		auto allAccountsJSONArr = s["accounts"];
+		
+		for (int i = 0; i < allAccountsJSONArr.size(); ++i) {
+			accounts.push_back(new Account(
+				allAccountsJSONArr[i]["cardNumber"],
+				allAccountsJSONArr[i]["fullName"],
+				allAccountsJSONArr[i]["phoneNumber"],
+				allAccountsJSONArr[i]["password"],
+				allAccountsJSONArr[i]["balance"],
+				allAccountsJSONArr[i]["blocked"]
+			));
+		}
+		in.close();
+	}
+	return accounts;
+}
+
 Account* Bank::getAccount(const string& cardNum, const string& pass){
     for(vector<Account*>::iterator it = _accounts.begin(); it != _accounts.end(); ++it) {
         /* std::cout << *it; ... */
@@ -44,12 +74,9 @@ Account* Bank::getAccount(const string& cardNum){
 }
 
 Bank* Bank::getBank() {
+	Bank::getUsers();
 	if (_self == 0)
-		_self = new Bank(vector<Account*>{
-				new Account("42", "Nassim Taleb", "1111", 10000),
-				new Account("24", "Денис Мельниченко", "2222", 20000),
-				new Account("55", "Umberto Eko", "3333", 30000, true)
-			});
+		_self = new Bank(Bank::getUsers());
 	return _self;
 }
 
