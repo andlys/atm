@@ -16,8 +16,9 @@ const string menu("Choose an action to perform:\n"
                   "3 - transfer money\n"
                   "4 - change phone number\n"
                   "5 - change PIN\n"
-                  "6 - exit and release card\n"
-                  // TODO replenish mobile phone
+                  "6 - replenish mobile phone\n"
+                  "7 - show my history\n"
+                  "8 - exit and release card\n"
                   );
 const string greetingPattern("Login successful\n\n"
                              "Greetings, dear %s!\n\n");
@@ -34,6 +35,8 @@ private:
     void menuDoTransfer(void);
     void menuDoChangePhone(void);
     void menuDoChangePIN(void);
+    void menuDoReplenishMobile(void);
+    void menuDoShowHistory(void);
     void menuDoExit(void);
     void menuDoIncorrectOption(void);
     void doPressEnterToContinue(void);
@@ -112,7 +115,9 @@ void DynamicModel::processMenuInteraction() {
             case  3: menuDoTransfer(); break;
             case  4: menuDoChangePhone(); break;
             case  5: menuDoChangePIN(); break;
-            case  6: menuDoExit(); exit = true; break;
+            case  6: menuDoReplenishMobile(); break;
+            case  7: menuDoShowHistory(); break;
+            case  8: menuDoExit(); exit = true; break;
             default: menuDoIncorrectOption(); break;
         }
     }
@@ -125,8 +130,15 @@ void DynamicModel::menuDoPrintBalance() {
 }
 
 void DynamicModel::menuDoWithdraw() {
-    // check if atm has at least some money???
-    cout << "Available nominals: 5, 10, 20, 50, 100, TODO" << endl; // concat vector to string
+    std::vector<int> nominals = _atm->availableNominals();
+    if (nominals.empty()) {
+        cout << "Sorry, currently ATM is out of cash" << endl;
+        return;
+    }
+    string str;
+    for (std::vector<int>::iterator it = nominals.begin(); it != nominals.end(); ++it)
+        str += fmt::format("{0}, ",  *it);
+    fmt::printf("Available nominals: %s\n", str);
     cout << "Input amount of money to withdraw (natural number): ";
     unsigned int amount;
     cin.clear();
@@ -246,6 +258,45 @@ void DynamicModel::menuDoChangePIN() {
     doPressEnterToContinue();
 }
 
+void DynamicModel::menuDoReplenishMobile() {
+    string phone;
+    cout << "Input destination phone number (phone number has strictly 10 digits, "
+         << "for example 0661234567): ";
+    cin >> phone;
+    double amount;
+    while (true) {
+        cout << "Input amount of money to replenish (floating point, precision up to 0.01): ";
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cin >> amount;
+        if ( (amount < 0) || Money(amount * 100).coins() == 0 )
+            cout << "Invalid amount!" << endl;
+        else
+            break;
+    }
+    Money money(amount * 100); // converting to coins
+    const Money& total = money * (100 + _atm->bank()._commissionTransfer);
+    fmt::printf("Replenishment plus commission of %d %c costs %.2f %s\n",
+        _atm->bank()._commissionTransfer, '%',
+        double(total), total.code());
+    if ( _atm->replenishPhone(phone, money) ) {
+        cout << "Phone number has been replenished successfully" << endl;
+    } else {
+        cout << "Failure: phone number was not replenished: request was declined "
+             << "by the Bank. Either your balance is insufficient or "
+             << "the phone number format is invalid" << endl;
+    }
+    doPressEnterToContinue();
+}
+
+void DynamicModel::menuDoShowHistory() {
+    cout << "Your history:" << endl;
+    vector<string> hist = _atm->getAllHistory();
+    for (std::vector<string>::iterator it = hist.begin(); it != hist.end(); ++it)
+        cout << *it << endl;
+    doPressEnterToContinue();
+}
+
 void DynamicModel::menuDoExit() {
     _atm->logout();
     cout << "Bye! Your session has ended. "
@@ -259,7 +310,6 @@ void DynamicModel::menuDoIncorrectOption() {
 }
 
 int main() {
-    // TODO fill the vector with accounts...
     DynamicModel model(new ATM(*Bank::getBank()));
     model.initialize();
     return 0;

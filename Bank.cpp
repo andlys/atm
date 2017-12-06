@@ -47,7 +47,7 @@ Bank* Bank::getBank() {
 	if (_self == 0)
 		_self = new Bank(vector<Account*>{
 				new Account("42", "Nassim Taleb", "1111", 10000),
-				new Account("24", "Денис Мельниченко", "2222", 20000),
+				new Account("24", "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "2222", 20000),
 				new Account("55", "Umberto Eko", "3333", 30000, true)
 			});
 	return _self;
@@ -94,10 +94,10 @@ bool Bank::changePhone(Account *acc, const string& pin, const string& newPhone) 
 	return false;
 }
 
-bool Bank::phoneReplenishment(Account *acc, const string &phone, const Money &money) {
+bool Bank::replenishPhone(Account *acc, const string &phone, const Money &money) {
 	Money commission = money * _commissionMobileReplenishment;
 	Money totalWithdraw = commission + money;
-	if (checkIsEnough(*acc, totalWithdraw)) {
+	if (checkIsEnough(*acc, totalWithdraw) && phone.length() == 10) {
 		*acc->_balance -= totalWithdraw;
 		return true;
 	}

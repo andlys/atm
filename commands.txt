@@ -1,0 +1,3 @@
+compile dynamic model:
+
+g++ -std=c++11 -o dynamic dynamic_model.cpp  ATM.cpp Money.cpp Bank.cpp Transfer.cpp Account.cpp MoneyDisposal.cpp BanknoteManager.cpp AccountAction.cpp lib/fmt-4.0.0/fmt/format.cc lib/fmt-4.0.0/fmt/printf.cc

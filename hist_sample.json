@@ -1,0 +1,123 @@
+{
+  "histories": [
+    {
+      "card_id": "42",
+      "history": [
+        {
+          "action": "signed in",
+          "datetime": "2017-11-28 12:30"
+        },
+        {
+          "action": "transfer from x to y",
+          "datetime": "2017-11-28 12:30"
+        },
+        {
+          "action": "withdrawn 500 uah",
+          "datetime": "2017-11-28 12:30"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 21:49:58"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 21:49:59"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 22:16:28"
+        },
+        {
+          "action": "Withdrawn 55 uah",
+          "datetime": "2017-12-06 22:17:56"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 22:18:26"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 22:46:14"
+        },
+        {
+          "action": "Replenished phone number 1234567890 with 2.5 UAH",
+          "datetime": "2017-12-06 22:46:26"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 22:47:33"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 23:50:46"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 23:50:54"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 23:56:55"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 00:01:25"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-07 00:14:36"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 00:15:06"
+        }
+      ]
+    },
+    {
+      "card_id": "21",
+      "history": [
+        {
+          "action": "signed in",
+          "datetime": "2017-11-28 12:30"
+        }
+      ]
+    },
+    {
+      "card_id": "24",
+      "history": [
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 23:25:00"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 23:25:00"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 23:25:20"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 23:25:21"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-06 23:33:53"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-06 23:33:54"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-07 00:04:08"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 00:04:15"
+        }
+      ]
+    }
+  ]
+}
