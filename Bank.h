@@ -25,7 +25,7 @@ public:
     const unsigned int _commissionMobileReplenishment;
 
     Bank(vector<Account*>);
-    
+
     static Bank* getBank();
 	void free() { delete _self; }
     bool transfer(Transfer&);
@@ -34,7 +34,7 @@ public:
     //bool withdraw(const Account&, const MoneyDisposal&);
     bool changePIN(Account*, const string&, const string&);
 	bool changePhone(Account*, const string&, const string&);
-	bool phoneReplenishment(Account*, const string&, const Money&);
+	bool replenishPhone(Account*, const string&, const Money&);
     void blockAccount(const string&);
 
     Account* getAccount(const string&, const string&);

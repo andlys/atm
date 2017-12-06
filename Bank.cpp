@@ -121,10 +121,10 @@ bool Bank::changePhone(Account *acc, const string& pin, const string& newPhone) 
 	return false;
 }
 
-bool Bank::phoneReplenishment(Account *acc, const string &phone, const Money &money) {
+bool Bank::replenishPhone(Account *acc, const string &phone, const Money &money) {
 	Money commission = money * _commissionMobileReplenishment;
 	Money totalWithdraw = commission + money;
-	if (checkIsEnough(*acc, totalWithdraw)) {
+	if (checkIsEnough(*acc, totalWithdraw) && phone.length() == 10) {
 		*acc->_balance -= totalWithdraw;
 		return true;
 	}

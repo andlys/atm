@@ -9,18 +9,37 @@ private:
     bool writeToFile() {
         // Get history.
         nlohmann::json j;
-        std::ifstream in("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+        std::ifstream in("hist_sample.json");
         in >> j;
-        
+
         // Search for history of current account.
         auto hist = j["histories"].begin();
+        bool found = false;
         for (; hist != j["histories"].end(); ++hist)
         {
             if (*hist->find("card_id") == _account->cardNumber()){
+                found = true;
                 break;
             }
         }
-        
+        if (!found) {
+            nlohmann::json tmp = {
+                { { } }
+            };
+            nlohmann::json newRecord = {
+                {"card_id", _account->cardNumber()},
+                {"history", tmp}
+            };
+            j["histories"].push_back(newRecord);
+            hist = j["histories"].begin();
+            for (; hist != j["histories"].end(); ++hist)
+            {
+                if (*hist->find("card_id") == _account->cardNumber()){
+                    break;
+                }
+            }
+            hist->find("history")->clear(); // deleting first null element
+        }
         // Push new actions to history.
         for (vector<const Action*>::iterator it = _history.begin(); it != _history.end(); ++it) {
             nlohmann::json j = {
@@ -29,14 +48,14 @@ private:
             };
             hist->find("history")->push_back(j);
         }
-        
+
         // Rewrite file.
-        std::ofstream out("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+        std::ofstream out("hist_sample.json");
         out << std::setw(2) << j << endl;
-        
+
         return false;
     }
-    
+
 public:
     Session(Account* acc) : _account(acc) {}
     ~Session() {
@@ -44,6 +63,40 @@ public:
         delete _account;
         return;
     };
+    vector<string> getAllHistory() {
+        nlohmann::json j;
+        std::ifstream in("hist_sample.json");
+        in >> j;
+        // Search for history of current account.
+        auto hist = j["histories"].begin();
+        bool found = false;
+        for (; hist != j["histories"].end(); ++hist)
+        {
+            if (*hist->find("card_id") == _account->cardNumber()){
+                found = true;
+                break;
+            }
+        }
+        vector<string> result;
+        nlohmann::json j2 = *hist->find("history");
+        if (found) {
+            //add serialized history
+            for (auto it = j2.begin(); it != j2.end(); it++) {
+                string str = *it->find("datetime");
+                str += " ";
+                str += *it->find("action");
+                result.push_back(str);
+            }
+        }
+        //add history of current session
+        for (auto it = _history.begin(); it != _history.end(); it++) {
+            string str = (*it)->datetimeString();
+            str += " ";
+            str += (*it)->toString();
+            result.push_back(str);
+        }
+        return result;
+    }
 
     Account* account() const { return _account; }
     Session& pushToHistory(const Action* action) {
@@ -63,6 +116,10 @@ ATM::~ATM(){
     delete _currentSession;
     //delete _bank;
     delete _banknoteManager;
+}
+
+vector<string> ATM::getAllHistory() {
+    return _currentSession->getAllHistory();
 }
 
 Account* ATM::login(const string& cardNum, const string& pass) {
@@ -150,11 +207,11 @@ bool ATM::changePhoneNumber(const string& pin, const string& newPhone) {
 	return false;
 }
 
-bool ATM::phoneReplenishment(const string &phone, const Money &money) {
+bool ATM::replenishPhone(const string &phone, const Money &money) {
 	Money commission = money * _bank._commissionMobileReplenishment;
 	Money totalWithdraw = commission + money;
 	if (_bank.checkIsEnough(*currentAccount(), totalWithdraw) &&
-        _bank.phoneReplenishment(currentAccount(), phone, money)) {
+        _bank.replenishPhone(currentAccount(), phone, money)) {
 		_currentSession->pushToHistory(new AccountAction(fmt::format(
             "Replenished phone number {} with {} {}", phone,
             double(money), money.code())));
