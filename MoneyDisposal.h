@@ -14,14 +14,13 @@ class BanknoteManager;
 class MoneyDisposal : public Action {
 	friend BanknoteManager;
 private:
-	vector<Banknote> _banknotes;
+	const vector<Banknote> _banknotes;
 	string _message;
 	MoneyDisposal() {};
 	MoneyDisposal(const vector<Banknote> banknotes, const string message = "Successful Withdrawal");
-	const string do_toString() const {
-		return "TODO toString on MoneyDisposal!!";
-	}
+	const string do_toString() const;
 public:
+    MoneyDisposal(const MoneyDisposal&);
 	~MoneyDisposal();
 	inline const string message() const { return _message; };
 	const vector<Banknote>& banknotes() const { return _banknotes; };

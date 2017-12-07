@@ -182,9 +182,7 @@ const MoneyDisposal ATM::withdraw(unsigned int cash) {
 	const MoneyDisposal md = _banknoteManager->getCash(cash);
 	if (md.isSuccess()) {
 		_bank.withdraw(*currentAccount(), Money(cash * 100));
-        //_currentSession->pushToHistory(&md);
-        _currentSession->pushToHistory(new AccountAction(fmt::format(
-            "Withdrawn {} uah", cash))); // TODO refactor and change to md
+        _currentSession->pushToHistory(new MoneyDisposal(md));
 	}
 	return md;
 }

@@ -4,18 +4,6 @@
       "card_id": "42",
       "history": [
         {
-          "action": "signed in",
-          "datetime": "2017-11-28 12:30"
-        },
-        {
-          "action": "transfer from x to y",
-          "datetime": "2017-11-28 12:30"
-        },
-        {
-          "action": "withdrawn 500 uah",
-          "datetime": "2017-11-28 12:30"
-        },
-        {
           "action": "Signed in",
           "datetime": "2017-12-06 21:49:58"
         },
@@ -70,15 +58,30 @@
         {
           "action": "Logged out",
           "datetime": "2017-12-07 00:15:06"
-        }
-      ]
-    },
-    {
-      "card_id": "21",
-      "history": [
+        },
         {
-          "action": "signed in",
-          "datetime": "2017-11-28 12:30"
+          "action": "Signed in",
+          "datetime": "2017-12-07 12:34:30"
+        },
+        {
+          "action": "Withdrawn 100 uah",
+          "datetime": "2017-12-07 12:34:47"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 12:35:35"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-07 12:45:57"
+        },
+        {
+          "action": "Withdrawn cash: 100 () 20 () 5 () ",
+          "datetime": "2017-12-07 12:46:07"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 12:46:21"
         }
       ]
     },
@@ -116,6 +119,14 @@
         {
           "action": "Logged out",
           "datetime": "2017-12-07 00:04:15"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-07 12:22:49"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 12:22:50"
         }
       ]
     }

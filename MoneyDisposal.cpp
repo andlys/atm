@@ -4,8 +4,17 @@ MoneyDisposal::MoneyDisposal(const vector<Banknote> banknotes, const string mess
 	return;
 }
 
+MoneyDisposal::MoneyDisposal(const MoneyDisposal& md): _banknotes(md.banknotes()), _message(md.message()) { }
+
 MoneyDisposal::~MoneyDisposal() {
 	return;
+}
+
+const string MoneyDisposal::do_toString() const {
+    string msg("Withdrawn cash: ");
+    for (vector<Banknote>::const_iterator it = _banknotes.begin(); it != _banknotes.end(); ++it)
+        msg += it->toString() + ", ";
+    return msg;
 }
 
 ostream& operator<<(ostream &os, const MoneyDisposal &md) {
