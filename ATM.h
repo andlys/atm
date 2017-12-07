@@ -36,7 +36,7 @@ public:
 	Account* logout();
 	Account* currentAccount();
     bool transfer(const string&, const Money&);
-	const MoneyDisposal withdraw(unsigned int);
+	const MoneyDisposal* withdraw(unsigned int);
 	bool changePIN(const string&, const string&);
 	bool changePhoneNumber(const string&, const string&);
 	bool replenishPhone(const string&, const Money&);

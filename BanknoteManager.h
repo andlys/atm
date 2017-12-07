@@ -27,5 +27,5 @@ public:
 	~BanknoteManager();
 	const vector<int> availableNominals() const;
 
-	const MoneyDisposal getCash(unsigned int cash);
+	const MoneyDisposal* getCash(unsigned int cash);
 };

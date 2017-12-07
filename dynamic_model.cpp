@@ -150,13 +150,12 @@ void DynamicModel::menuDoWithdraw() {
         _atm->bank()._commissionWithdrawal, '%',
         double(total), total.code());
     if (_atm->currentAccount()->balance() >= total) {
-        const MoneyDisposal& md = _atm->withdraw(amount);
-        if (md.banknotes().empty()) {
+        const MoneyDisposal* md = _atm->withdraw(amount);
+        if (md->banknotes().empty()) {
             cout << "Failure: unable to give you this specific amount of money. "
                  << "Please, try another amount"<< endl;
         } else {
-            cout << "Success" << endl;
-            cout << md << endl;
+            cout << *md << endl;
         }
     } else {
         cout << "Failure: you don't have enough money!" << endl;

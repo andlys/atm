@@ -103,20 +103,20 @@ BanknoteManager::~BanknoteManager() {
 	return;
 }
 
-const MoneyDisposal BanknoteManager::getCash(unsigned int cash)
+const MoneyDisposal* BanknoteManager::getCash(unsigned int cash)
 {
-	if (cash == 0 ) return MoneyDisposal(vector<Banknote>{}, "Operation failed: You are trying to get a zero banknote");
+	if (cash == 0 ) return new MoneyDisposal(vector<Banknote>{}, "Operation failed: You are trying to get a zero banknote");
 	if (!enoughMoney(cash)) {
-		return MoneyDisposal(vector<Banknote>{}, "Operation failed: Not Enough Money in ATM");
+		return new MoneyDisposal(vector<Banknote>{}, "Operation failed: Not Enough Money in ATM");
 	}
 	////500, 200, 100, 50, 20, 10, 5, 2, 1
 	vector<int> values = { 500, 200, 100, 50, 20, 10, 5, 2, 1 };
 	vector<int> amounts = this->amounts();
 	vector<vector<int>> banknotesResult = solutions(values, amounts, vector<int>(values.size()), cash, 0);
 	if (banknotesResult.size() == 0) {
-		return MoneyDisposal(vector<Banknote>{}, "Operation failed: No such banknotes in ATM");
+		return new MoneyDisposal(vector<Banknote>{}, "Operation failed: No such banknotes in ATM");
 	}
 	vector<Banknote> res = banknotes(banknotesResult[0]);
 
-	return MoneyDisposal(res, "Successful Withdrawal");
+	return new MoneyDisposal(res, "Successful Withdrawal");
 }

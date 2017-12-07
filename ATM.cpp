@@ -171,18 +171,16 @@ bool ATM::transfer(const string& to, const Money& amount) {
 }
 
 // copying constructor of MoneyDisposal is invoked twice in this method TODO fix
-const MoneyDisposal ATM::withdraw(unsigned int cash) {
+const MoneyDisposal* ATM::withdraw(unsigned int cash) {
 	Money money(cash * 100);
 	Money commission = money * _bank._commissionWithdrawal;
 	Money totalWithdraw = commission + money;
-	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw)) {
-		const MoneyDisposal md = _banknoteManager->getCash(0);
-		return md;
-	}
-	const MoneyDisposal md = _banknoteManager->getCash(cash);
-	if (md.isSuccess()) {
+	if (!_bank.checkIsEnough(*currentAccount(), totalWithdraw))
+		return _banknoteManager->getCash(0);
+	const MoneyDisposal* md = _banknoteManager->getCash(cash);
+	if (md->isSuccess()) {
 		_bank.withdraw(*currentAccount(), Money(cash * 100));
-        _currentSession->pushToHistory(new MoneyDisposal(md));
+        _currentSession->pushToHistory(md);
 	}
 	return md;
 }

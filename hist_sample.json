@@ -82,6 +82,30 @@
         {
           "action": "Logged out",
           "datetime": "2017-12-07 12:46:21"
+        },
+        {
+          "action": "Signed in",
+          "datetime": "2017-12-07 19:02:43"
+        },
+        {
+          "action": "Withdrawn cash: 200 () , ",
+          "datetime": "2017-12-07 19:02:49"
+        },
+        {
+          "action": "Withdrawn cash: 200 () , 20 () , 5 () , ",
+          "datetime": "2017-12-07 19:02:54"
+        },
+        {
+          "action": "Withdrawn cash: 500 () , ",
+          "datetime": "2017-12-07 19:06:46"
+        },
+        {
+          "action": "Withdrawn cash: 100 () , 100 () , 100 () , 50 () , 50 () , 50 () , 50 () , ",
+          "datetime": "2017-12-07 19:06:51"
+        },
+        {
+          "action": "Logged out",
+          "datetime": "2017-12-07 19:07:39"
         }
       ]
     },
