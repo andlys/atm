@@ -26,9 +26,9 @@ int main(int argc, const char * argv[]) {
     const Account* acc3 = new Account("3", "qwerty", 13);*/
     
     vector<Account*> accounts;
-    accounts.push_back(new Account("1", "qwerty", 13));
-    accounts.push_back(new Account("2", "qwerty", 13));
-    accounts.push_back(new Account("3", "qwerty", 13));
+    accounts.push_back(new Account("1", "qwerty", "13", "j"));
+    accounts.push_back(new Account("2", "qwerty", "13", "j"));
+    accounts.push_back(new Account("3", "qwerty", "13", "j"));
     
     /*const Account* acc1 = new Account("1", "qwerty", 13);
     const Account* acc2 = new Account("2", "qwerty", 13);
@@ -41,13 +41,13 @@ int main(int argc, const char * argv[]) {
     
     Bank bank(accounts);
     
-    ATM atm(bank);
+    //ATM atm(bank);
     
-    atm.login("1", "qwerty");
+    //atm.login("1", "qwerty");
     
-    atm.transfer("2", 13);
+    //atm.transfer("2", 13);
     
-    bank.pseudoAdd(1234, *accounts[0]);
+    bank.addAccount("113", "Alexey Ivanov", "11222333", "pwd");
     
     return 0;
 }

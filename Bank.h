@@ -17,9 +17,10 @@ private:
 	static vector<Account*> getUsers();
     // No copying constructor for bank.
     Bank(Bank&);
-protected:
-	~Bank();
+//protected:
+//	~Bank();
 public:
+    ~Bank();
     const unsigned int _commissionWithdrawal;
     const unsigned int _commissionTransfer;
     const unsigned int _commissionMobileReplenishment;
@@ -41,6 +42,9 @@ public:
 
     // Very bad decision
     Account* getAccount(const string&);
+    
+    Account* addAccount(string card, string name, string phone, string pwd,
+                        unsigned long long balance = 0, bool blocked = false);
 
     // Delete this. Created for the sake of testing.
     void pseudoAdd(Money amount, Account& acc){

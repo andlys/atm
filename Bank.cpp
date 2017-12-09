@@ -73,6 +73,48 @@ Account* Bank::getAccount(const string& cardNum){
     return 0;
 }
 
+Account* Bank::addAccount(string card, string name, string phone, string pwd,
+                          unsigned long long balance, bool blocked){
+    // Add new account to vector.
+    _accounts.push_back(new Account(card, name, phone, pwd, balance, blocked));
+    
+    // Get accounts.
+    nlohmann::json j;
+    std::ifstream in("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/accounts.json");
+    in >> j;
+    
+    // Create and add new account json object to json data base.
+    nlohmann::json newAccount = {
+        {"balance", balance},
+        {"card_number", card},
+        {"full_name", name},
+        {"phone_number", name}
+    };
+    
+    j["accounts"].push_back(newAccount);
+    
+    // Update history file with new account.
+    nlohmann::json h;
+    std::ifstream inh("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+    inh >> h;
+    
+    nlohmann::json newHist = {
+        {"card_id", card},
+        {"history", nlohmann::json::array()}
+    };
+    
+    h["histories"].push_back(newHist);
+    
+    // Write changes to files.
+    std::ofstream outA("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/accounts.json");
+    outA << std::setw(2) << j << endl;
+    
+    std::ofstream outH("/Users/denysmelnychenko/Documents/C++/MOOP/atm/atm/hist_sample.json");
+    outH << std::setw(2) << h << endl;
+    
+    return _accounts.back();
+}
+
 Bank* Bank::getBank() {
 	Bank::getUsers();
 	if (_self == 0)
