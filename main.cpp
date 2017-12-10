@@ -47,7 +47,7 @@ int main(int argc, const char * argv[]) {
     
     //atm.transfer("2", 13);
     
-    bank.addAccount("113", "Alexey Ivanov", "11222333", "pwd");
+    //bank.addAccount("113", "Charles de Gaulle", "11222333", "pwd");
     
     return 0;
 }

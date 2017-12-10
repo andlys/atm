@@ -17,10 +17,9 @@ private:
 	static vector<Account*> getUsers();
     // No copying constructor for bank.
     Bank(Bank&);
-//protected:
-//	~Bank();
+protected:
+	~Bank();
 public:
-    ~Bank();
     const unsigned int _commissionWithdrawal;
     const unsigned int _commissionTransfer;
     const unsigned int _commissionMobileReplenishment;

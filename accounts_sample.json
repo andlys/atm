@@ -1,24 +1,35 @@
 {
-	"accounts": [{
-		"cardNumber": "42",
-		"fullName": "Nassim Taleb",
-		"phoneNumber": "0631234567",
-		"balance": 1234525,
-		"password": "1111",
-		"blocked": false
-	}, {
-		"cardNumber": "24",
-		"fullName": "Денис Мельниченко",
-		"phoneNumber": "0631234568",
-		"balance": 20000,
-		"password": "2222",
-		"blocked": false
-	}, {
-		"cardNumber": "55",
-		"fullName": "Augusto Pinochet",
-		"phoneNumber": "0631234569",
-		"balance": 9999999999,
-		"password": "3333",
-		"blocked": true
-	}]
+  "accounts": [
+    {
+      "balance": 1234525,
+      "blocked": false,
+      "cardNumber": "42",
+      "fullName": "Nassim Taleb",
+      "password": "1111",
+      "phoneNumber": "0631234567"
+    },
+    {
+      "balance": 20000,
+      "blocked": false,
+      "cardNumber": "24",
+      "fullName": "Денис Мельниченко",
+      "password": "2222",
+      "phoneNumber": "0631234568"
+    },
+    {
+      "balance": 9999999999,
+      "blocked": true,
+      "cardNumber": "55",
+      "fullName": "Augusto Pinochet",
+      "password": "3333",
+      "phoneNumber": "0631234569"
+    },
+    {
+      "balance": 0,
+      "blocked": false,
+      "cardNumber": "113",
+      "fullName": "Charles de Gaulle",
+      "password": "pwd"
+    }
+  ]
 }
