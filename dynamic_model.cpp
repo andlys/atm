@@ -313,6 +313,5 @@ int main() {
     DynamicModel model(new ATM(*bank));
     model.initialize();
 	bank->free();
-	system("pause");
     return 0;
 }
