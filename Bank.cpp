@@ -12,7 +12,7 @@ Bank::Bank(vector<Account*> accounts):
     _commissionMobileReplenishment(2) {}
 
 bool Bank::updateAccounts() {
-	std::ofstream out("accounts_sample.json");
+	std::ofstream out("accounts.json");
 	if (!out.is_open()) {
 		cout << "No such file!" << endl;
 		return false;
@@ -33,7 +33,7 @@ bool Bank::updateAccounts() {
 	}
 	out << std::setw(2) << j << endl;
 	out.close();
-	
+
 	return true;
 }
 
@@ -59,7 +59,7 @@ const Account& Bank::removeFromBalance(const Money& amount, Account& target){
 vector<Account*> Bank::getUsers() {
 	vector<Account*> accounts;
 
-	std::ifstream in("accounts_sample.json");
+	std::ifstream in("accounts.json");
 	if (!in.is_open()) {
 		cout << "No such file" << endl;
 	}
@@ -102,12 +102,12 @@ Account* Bank::addAccount(string card, string name, string phone, string pwd,
                           unsigned long long balance, bool blocked){
     // Add new account to vector.
     _accounts.push_back(new Account(card, name, phone, pwd, balance, blocked));
-    
+
     // Get accounts.
     nlohmann::json j;
-    std::ifstream in("accounts_sample.json");
+    std::ifstream in("accounts.json");
     in >> j;
-    
+
     // Create and add new account json object to json data base.
     nlohmann::json newAccount = {
         {"cardNumber", card},
@@ -116,28 +116,28 @@ Account* Bank::addAccount(string card, string name, string phone, string pwd,
         {"password", pwd},
         {"blocked", blocked}
     };
-    
+
     j["accounts"].push_back(newAccount);
-    
+
     // Update history file with new account.
     nlohmann::json h;
-    std::ifstream inh("hist_sample.json");
+    std::ifstream inh("history.json");
     inh >> h;
-    
+
     nlohmann::json newHist = {
         {"card_id", card},
         {"history", nlohmann::json::array()}
     };
-    
+
     h["histories"].push_back(newHist);
-    
+
     // Write changes to files.
-    std::ofstream outA("accounts_sample.json");
+    std::ofstream outA("accounts.json");
     outA << std::setw(2) << j << endl;
-    
-    std::ofstream outH("hist_sample.json");
+
+    std::ofstream outH("history.json");
     outH << std::setw(2) << h << endl;
-    
+
     return _accounts.back();
 }
 

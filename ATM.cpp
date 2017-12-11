@@ -9,7 +9,7 @@ private:
     bool writeToFile() {
         // Get history.
         nlohmann::json j;
-        std::ifstream in("hist_sample.json");
+        std::ifstream in("history.json");
         in >> j;
 
         // Search for history of current account.
@@ -50,7 +50,7 @@ private:
         }
 
         // Rewrite file.
-        std::ofstream out("hist_sample.json");
+        std::ofstream out("history.json");
         out << std::setw(2) << j << endl;
 		// Close File
 		out.close();
@@ -66,7 +66,7 @@ public:
     };
     vector<string> getAllHistory() {
         nlohmann::json j;
-        std::ifstream in("hist_sample.json");
+        std::ifstream in("history.json");
         in >> j;
         // Search for history of current account.
         auto hist = j["histories"].begin();

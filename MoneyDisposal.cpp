@@ -4,8 +4,6 @@ MoneyDisposal::MoneyDisposal(const vector<Banknote> banknotes, const string mess
 	return;
 }
 
-MoneyDisposal::MoneyDisposal(const MoneyDisposal& md): _banknotes(md.banknotes()), _message(md.message()) { }
-
 MoneyDisposal::~MoneyDisposal() {
 	return;
 }

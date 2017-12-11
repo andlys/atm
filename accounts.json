@@ -1,59 +1,36 @@
 {
   "accounts": [
     {
-      "balance": 1100,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Мельниченко Денис Батькович",
-      "phone_number": "1234567890"
+      "balance": 999612340,
+      "blocked": false,
+      "cardNumber": "42",
+      "fullName": "Nassim Taleb",
+      "password": "1111",
+      "phoneNumber": "0668183456"
     },
     {
-      "balance": 42,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Бублик Володимир Васильович",
-      "phone_number": "1234567890"
+      "balance": 120000,
+      "blocked": true,
+      "cardNumber": "24",
+      "fullName": "Денис Мельниченко",
+      "password": "2222",
+      "phoneNumber": "0631234568"
     },
     {
-      "balance": 1100,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Мельниченко Олег Батькович",
-      "phone_number": "1234567890"
+      "balance": 9999999999,
+      "blocked": true,
+      "cardNumber": "55",
+      "fullName": "Augusto Pinochet",
+      "password": "3333",
+      "phoneNumber": "0631234569"
     },
     {
-      "balance": 42,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Бублик Володимир Васильович",
-      "phone_number": "1234567890"
-    },
-    {
-      "balance": 1100,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Мельниченко Олег Батькович",
-      "phone_number": "1234567890"
-    },
-    {
-      "balance": 42,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Бублик Володимир Васильович",
-      "phone_number": "1234567890"
-    },
-    {
-      "balance": 1100,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Мельниченко Олег Батькович",
-      "phone_number": "1234567890"
-    },
-    {
-      "balance": 42,
-      "card_number": "1234 1234 1234 1234",
-      "full_name": "Бублик Володимир Васильович",
-      "phone_number": "1234567890"
-    },
-    {
-      "balance": 0,
-      "card_number": "113",
-      "full_name": "Alexey Ivanov",
-      "phone_number": "Alexey Ivanov"
+      "balance": 10,
+      "blocked": false,
+      "cardNumber": "113",
+      "fullName": "Charles de Gaulle",
+      "password": "pwd",
+      "phoneNumber": "0631234568"
     }
-  ],
-  "bank": "ПриватБанк"
+  ]
 }

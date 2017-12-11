@@ -47,8 +47,6 @@ public:
 };
 
 void DynamicModel::doPressEnterToContinue() {
-    cin.clear();
-    cin.ignore(10000, '\n');
     string tmp;
     cout << "Press Enter to continue" << endl;
     std::getline(cin, tmp);
@@ -106,9 +104,10 @@ void DynamicModel::processMenuInteraction() {
     while (!exit) {
         cout << "Please, select operation by number: ";
         unsigned int menuOption;
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cin >> menuOption;
+        if (!(cin >> menuOption)) {
+            cin.clear();
+            cin.ignore(10000,'\n');
+        }
         switch (menuOption) {
             case  1: menuDoPrintBalance(); break;
             case  2: menuDoWithdraw(); break;
@@ -141,9 +140,10 @@ void DynamicModel::menuDoWithdraw() {
     fmt::printf("Available nominals: %s\n", str);
     cout << "Input amount of money to withdraw (natural number): ";
     unsigned int amount;
-    cin.clear();
-    cin.ignore(10000, '\n');
-    cin >> amount;
+    if (!(cin >> amount)) {
+        cin.clear();
+        cin.ignore(10000,'\n');
+    }
     Money money(amount * 100); // converting to coins
     const Money& total = money * (100 + _atm->bank()._commissionWithdrawal);
     fmt::printf("Withdrawal plus commission of %d %c costs %.2f %s\n",
@@ -170,9 +170,10 @@ void DynamicModel::menuDoTransfer() {
     double amount;
     while (true) {
         cout << "Input amount of money to transfer (floating point, precision up to 0.01): ";
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cin >> amount;
+        if (!(cin >> amount)) {
+            cin.clear();
+            cin.ignore(10000,'\n');
+        }
         if ( (amount < 0) || Money(amount * 100).coins() == 0 )
             cout << "Invalid amount!" << endl;
         else
@@ -265,8 +266,10 @@ void DynamicModel::menuDoReplenishMobile() {
     double amount;
     while (true) {
         cout << "Input amount of money to replenish (floating point, precision up to 0.01): ";
-        cin.clear();
-        cin.ignore(10000, '\n');
+        if (!(cin >> amount)) {
+            cin.clear();
+            cin.ignore(10000,'\n');
+        }
         cin >> amount;
         if ( (amount < 0) || Money(amount * 100).coins() == 0 )
             cout << "Invalid amount!" << endl;

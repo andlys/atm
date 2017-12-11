@@ -20,7 +20,6 @@ private:
 	MoneyDisposal(const vector<Banknote> banknotes, const string message = "Successful Withdrawal");
 	const string do_toString() const;
 public:
-    MoneyDisposal(const MoneyDisposal&);
 	~MoneyDisposal();
 	inline const string message() const { return _message; };
 	const vector<Banknote>& banknotes() const { return _banknotes; };

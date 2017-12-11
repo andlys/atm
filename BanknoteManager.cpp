@@ -93,7 +93,7 @@ vector<int> BanknoteManager::myCopy(const vector<int> ar)
 map<int, vector<Banknote>> BanknoteManager::getBanknotes() {
 	map<int, vector<Banknote>> banknotes;
 	vector<char*> nominals{ "500", "200", "100", "50", "20", "10", "5", "2", "1" };
-	std::ifstream in("banknotes_sample.json");
+	std::ifstream in("banknotes.json");
 	if (!in.is_open()) {
 		cout << "No such file" << endl;
 	}
@@ -101,7 +101,7 @@ map<int, vector<Banknote>> BanknoteManager::getBanknotes() {
 		string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 		auto j = nlohmann::json::parse(str.c_str());
 		auto allBanknotesJSON = j["banknotes"];
-		
+
 		for (int i = 0; i < nominals.size(); ++i) {
 			auto nominalBanknotes = allBanknotesJSON[nominals[i]];
 			vector<Banknote> vNominalBanknotes;
@@ -116,7 +116,7 @@ map<int, vector<Banknote>> BanknoteManager::getBanknotes() {
 }
 
 bool BanknoteManager::updateBanknotes() {
-	std::ofstream out("banknotes_sample.json");
+	std::ofstream out("banknotes.json");
 	if (!out.is_open()) {
 		cout << "No such file!" << endl;
 		return false;
@@ -134,7 +134,7 @@ bool BanknoteManager::updateBanknotes() {
 		}
 		j["banknotes"][std::to_string(it->first).c_str()] = banknotes;
 	}
-	cout << j << endl;
+	//cout << j << endl;
 	out << std::setw(2) << j << endl;
 	out.close();
 
