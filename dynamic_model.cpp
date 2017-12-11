@@ -2,6 +2,8 @@
 #include <string>
 #include "lib/fmt-4.0.0/fmt/format.h"
 #include "lib/fmt-4.0.0/fmt/printf.h"
+#include "lib/fmt-4.0.0/fmt/printf.cc"
+#include "lib/fmt-4.0.0/fmt/format.cc"
 #include "ATM.h"
 
 using std::cout;
