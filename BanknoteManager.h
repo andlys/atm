@@ -6,8 +6,10 @@
 using std::string;
 using std::vector;
 using std::map;
+class ATM;
 
 class BanknoteManager {
+	friend ATM;
 private:
 	//first - nominal, second - list of Banknotes
 	map<int, vector<Banknote>> _available;
@@ -22,8 +24,15 @@ private:
 
 	int compute(const vector<int> values, const vector<int> variation);
 	vector<int> myCopy(const vector<int> ar);
-public:
+
+	// Fetch all banknotes from DB
+	map<int, vector<Banknote>> getBanknotes();
+	
+	// Update banknotes in DB
+	bool updateBanknotes();
+
 	BanknoteManager();
+public:
 	~BanknoteManager();
 	const vector<int> availableNominals() const;
 

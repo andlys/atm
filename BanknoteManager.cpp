@@ -1,4 +1,9 @@
 #include "BanknoteManager.h"
+#include <fstream>
+#include "lib/json/json.hpp"
+
+using std::cout;
+using std::endl;
 
 vector<int> BanknoteManager::amounts() const
 {
@@ -85,17 +90,58 @@ vector<int> BanknoteManager::myCopy(const vector<int> ar)
 	return ret;
 }
 
-BanknoteManager::BanknoteManager() : _available({
-	{ 500, vector<Banknote> { Banknote{ 500, "", "" } } },
-	{ 200, vector<Banknote> { Banknote{ 200, "", "" }, Banknote{ 200, "", "" } } },
-	{ 100, vector<Banknote> { Banknote{ 100, "", "" }, Banknote{ 100, "", "" }, Banknote{ 100, "", "" } } },
-	{ 50, vector<Banknote> { Banknote{ 50, "", "" }, Banknote{ 50, "", "" }, Banknote{ 50, "", "" }, Banknote{ 50, "", "" } } },
-	{ 20, vector<Banknote> { Banknote{ 20, "", "" }, Banknote{ 20, "", "" }, Banknote{ 20, "", "" }, Banknote{ 20, "", "" }, Banknote{ 20, "", "" } } },
-	{ 10, vector<Banknote> { Banknote{ 10, "", "" }, Banknote{ 10, "", "" }, Banknote{ 10, "", "" }, Banknote{ 10, "", "" }, Banknote{ 10, "", "" }, Banknote{ 10, "", "" } } },
-	{ 5, vector<Banknote> { Banknote{ 5, "", "" }, Banknote{ 5, "", "" }, Banknote{ 5, "", "" }, Banknote{ 5, "", "" }, Banknote{ 5, "", "" }, Banknote{ 5, "", "" }, Banknote{ 5, "", "" } } },
-	{ 2, vector<Banknote> { Banknote{ 2, "", "" } } },
-	{ 1, vector<Banknote> { } }
-}) {
+map<int, vector<Banknote>> BanknoteManager::getBanknotes() {
+	map<int, vector<Banknote>> banknotes;
+	vector<char*> nominals{ "500", "200", "100", "50", "20", "10", "5", "2", "1" };
+	std::ifstream in("banknotes_sample.json");
+	if (!in.is_open()) {
+		cout << "No such file" << endl;
+	}
+	else {
+		string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+		auto j = nlohmann::json::parse(str.c_str());
+		auto allBanknotesJSON = j["banknotes"];
+		
+		for (int i = 0; i < nominals.size(); ++i) {
+			auto nominalBanknotes = allBanknotesJSON[nominals[i]];
+			vector<Banknote> vNominalBanknotes;
+			for (int j = 0; j < nominalBanknotes.size(); ++j) {
+				vNominalBanknotes.push_back(Banknote{ nominalBanknotes[j]["nominal"], nominalBanknotes[j]["code"], nominalBanknotes[j]["id"]});
+			}
+			banknotes.insert(std::pair<int, vector<Banknote>>(atoi(nominals[i]), vNominalBanknotes));
+		}
+		in.close();
+	}
+	return banknotes;
+}
+
+bool BanknoteManager::updateBanknotes() {
+	std::ofstream out("banknotes_sample.json");
+	if (!out.is_open()) {
+		cout << "No such file!" << endl;
+		return false;
+	}
+	nlohmann::json j;
+	j["banknotes"] = { { "1",{} }, { "2",{} }, { "5",{} }, { "10",{} }, { "20",{} }, { "50",{} }, { "100",{} }, { "200",{} }, {"500", {}} };
+	for (auto it = _available.begin(); it != _available.end(); ++it) {
+		nlohmann::json banknotes;
+		for (int i = 0; i < it->second.size(); ++i) {
+			banknotes.push_back({
+				{ "nominal", it->second[i]._nominal },
+				{ "code", it->second[i]._code },
+				{ "id", it->second[i]._id },
+			});
+		}
+		j["banknotes"][std::to_string(it->first).c_str()] = banknotes;
+	}
+	cout << j << endl;
+	out << std::setw(2) << j << endl;
+	out.close();
+
+	return true;
+}
+
+BanknoteManager::BanknoteManager() : _available(BanknoteManager::getBanknotes()) {
 	return;
 }
 

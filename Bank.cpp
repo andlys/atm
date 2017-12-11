@@ -11,7 +11,33 @@ Bank::Bank(vector<Account*> accounts):
     _commissionTransfer(3),
     _commissionMobileReplenishment(2) {}
 
-Bank::~Bank(){}
+bool Bank::updateAccounts() {
+	std::ofstream out("accounts_sample.json");
+	if (!out.is_open()) {
+		cout << "No such file!" << endl;
+		return false;
+	}
+	const vector<Account*> accounts = this->_accounts;
+	nlohmann::json j;
+	j["accounts"] = {};
+	for (int i = 0; i < accounts.size(); ++i) {
+		nlohmann::json tmp = {
+			{ "balance", accounts[i]->balance().coins() },
+			{ "blocked", accounts[i]->isBlocked() },
+			{ "cardNumber", accounts[i]->cardNumber() },
+			{ "fullName", accounts[i]->fullName() },
+			{ "password", accounts[i]->_password },
+			{ "phoneNumber", accounts[i]->phoneNumber() }
+		};
+		j["accounts"].push_back(tmp);
+	}
+	out << std::setw(2) << j << endl;
+	out.close();
+	
+	return true;
+}
+
+Bank::~Bank() { updateAccounts(); }
 
 void Bank::blockAccount(const string& cardNum) {
     Account* acc = getAccount(cardNum);
@@ -41,7 +67,6 @@ vector<Account*> Bank::getUsers() {
 		string str((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 		auto s = nlohmann::json::parse(str.c_str());
 		auto allAccountsJSONArr = s["accounts"];
-		
 		for (int i = 0; i < allAccountsJSONArr.size(); ++i) {
 			accounts.push_back(new Account(
 				allAccountsJSONArr[i]["cardNumber"],
@@ -117,11 +142,14 @@ Account* Bank::addAccount(string card, string name, string phone, string pwd,
 }
 
 Bank* Bank::getBank() {
-	Bank::getUsers();
 	if (_self == 0)
 		_self = new Bank(Bank::getUsers());
 	return _self;
 }
+
+void Bank::free() {
+	delete _self;
+};
 
 bool Bank::transfer(Transfer& t) {
     Money commission = t.amount() * _commissionTransfer;

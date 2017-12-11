@@ -17,6 +17,7 @@ private:
 	static vector<Account*> getUsers();
     // No copying constructor for bank.
     Bank(Bank&);
+	bool updateAccounts();
 protected:
 	~Bank();
 public:
@@ -27,7 +28,7 @@ public:
     Bank(vector<Account*>);
 
     static Bank* getBank();
-	void free() { delete _self; }
+	void free();
     bool transfer(Transfer&);
 	bool checkIsEnough(const Account&, const Money&);
     bool withdraw(Account&, const Money&);

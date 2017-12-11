@@ -52,15 +52,16 @@ private:
         // Rewrite file.
         std::ofstream out("hist_sample.json");
         out << std::setw(2) << j << endl;
-
+		// Close File
+		out.close();
         return false;
     }
 
 public:
-    Session(Account* acc) : _account(acc) {}
+	Session(Account* acc) : _account(acc) {}
     ~Session() {
         writeToFile();
-        delete _account;
+        //delete _account;
         return;
     };
     vector<string> getAllHistory() {
@@ -180,6 +181,7 @@ const MoneyDisposal* ATM::withdraw(unsigned int cash) {
 	const MoneyDisposal* md = _banknoteManager->getCash(cash);
 	if (md->isSuccess()) {
 		_bank.withdraw(*currentAccount(), Money(cash * 100));
+		_banknoteManager->updateBanknotes();
         _currentSession->pushToHistory(md);
 	}
 	return md;

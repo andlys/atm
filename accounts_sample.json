@@ -1,16 +1,16 @@
 {
   "accounts": [
     {
-      "balance": 1234525,
+      "balance": 999624100,
       "blocked": false,
       "cardNumber": "42",
       "fullName": "Nassim Taleb",
       "password": "1111",
-      "phoneNumber": "0631234567"
+      "phoneNumber": "0668183456"
     },
     {
-      "balance": 20000,
-      "blocked": false,
+      "balance": 120000,
+      "blocked": true,
       "cardNumber": "24",
       "fullName": "Денис Мельниченко",
       "password": "2222",
@@ -25,11 +25,12 @@
       "phoneNumber": "0631234569"
     },
     {
-      "balance": 0,
+      "balance": 10,
       "blocked": false,
       "cardNumber": "113",
       "fullName": "Charles de Gaulle",
-      "password": "pwd"
+      "password": "pwd",
+      "phoneNumber": "0631234568"
     }
   ]
 }

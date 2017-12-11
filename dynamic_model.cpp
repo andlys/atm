@@ -309,7 +309,10 @@ void DynamicModel::menuDoIncorrectOption() {
 }
 
 int main() {
-    DynamicModel model(new ATM(*Bank::getBank()));
+	Bank *bank = Bank::getBank();
+    DynamicModel model(new ATM(*bank));
     model.initialize();
+	bank->free();
+	system("pause");
     return 0;
 }

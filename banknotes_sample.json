@@ -1,0 +1,13 @@
+{
+  "banknotes": {
+    "1": [ ],
+    "2": [ {"nominal": 2, "code": "0011", "id":  "f3837d268dsd" }],
+    "5": [ {"nominal": 5, "code": "9988", "id":  "n7vcydn8f3dn73" },{"nominal": 5, "code": "9998", "id":  "7bcn8934fb73" },{"nominal": 5, "code": "9999", "id":  "67fndmnbncxmnf824" },{"nominal": 5, "code": "8999", "id":  "6bf78d9m6b7f8" },{"nominal": 5, "code": "8899", "id":  "ft6dydbvnxb" },{"nominal": 5, "code": "8889", "id":  "6bf789d6gf743" },{"nominal": 5, "code": "8888", "id":  "567g57fhdf5n" }],
+    "10": [ {"nominal": 10, "code": "7788", "id":  "10qosxmhgfjd" },{"nominal": 10, "code": "7778", "id":  "5x2v2v4xv3" },{"nominal": 10, "code": "7666", "id":  "9897b968v76v4" },{"nominal": 10, "code": "7766", "id":  "cb837658753865" },{"nominal": 10, "code": "7776", "id":  "c2b75v283c" },{"nominal": 10, "code": "7777", "id":  "5nc347nh387fh3" }],
+    "20": [ {"nominal": 20, "code": "6666", "id":  "bn96b87v3bccx" },{"nominal": 20, "code": "5666", "id":  "bv78cn97cw34c" },{"nominal": 20, "code": "5566", "id":  "6b879cn8vbc3" },{"nominal": 20, "code": "5556", "id":  "sb27v7b587cn8" },{"nominal": 20, "code": "5555", "id":  "bvc8n3b8v7c2" }],
+    "50": [ {"nominal": 50, "code": "4444", "id":  "q2z4xvbn8c34" },{"nominal": 50, "code": "1444", "id":  "n8b9xcbbvcvv" },{"nominal": 50, "code": "1144", "id":  "897bnbvcxcvb" },{"nominal": 50, "code": "1114", "id":  "nbvcxcvbnnb3" }],
+    "100": [ {"nominal": 100, "code": "1333", "id":  "67887vc9mc0" },{"nominal": 100, "code": "1133", "id":  "56g7h85j8hc" },{"nominal": 100, "code": "1113", "id":  "6n9876c5vb67" } ],
+    "200": [ {"nominal": 200, "code": "1122", "id":  "0jhg6wc5vbn" }, {"nominal": 200, "code": "1112", "id":  "27nm8nib65v" } ],
+    "500": [ {"nominal": 500, "code": "1111", "id":  "1eedwesfa2q" } ]
+  }
+}
